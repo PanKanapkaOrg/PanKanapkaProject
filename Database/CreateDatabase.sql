@@ -108,3 +108,5 @@ create table CateringFirmClientFirm
 cateringFirmID bigint not null foreign key references CateringFirms(ID),
 clientFirmID bigint not null foreign key references ClientFirms(ID),
 )
+
+
