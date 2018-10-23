@@ -21,8 +21,8 @@ namespace Api.Web.Controllers
             {
                 new Reservation()
                 {
-                    ClientFirmId = "client",
-                    ReservationId = "resId",
+                    ClientFirmId = 13124,
+                    ReservationId = 1231,
                     IsActiveReservation = true,
                     ReservationItems = new List<ReservationItem>
                     {

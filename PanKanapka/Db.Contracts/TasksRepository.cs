@@ -18,23 +18,25 @@ namespace Db.Contracts
             using (IDbConnection dbConn = new SqlConnection(@"Integrated Security = SSPI; Persist Security Info = False; Initial Catalog = Projekt; Data Source =.;"))
             {
                 dbConn.Open();
-
-                var affectedRows = dbConn.Execute(insertTaskSqlQuery,
-                tasksItems
-                .SelectMany(p =>
+                if (dbConn.State == ConnectionState.Open)
                 {
-                    return p.ClientFirmIds
-                         .Select(fId =>
-                         {
-                             return new
+                    var affectedRows = dbConn.Execute(insertTaskSqlQuery,
+                    tasksItems
+                    .SelectMany(p =>
+                    {
+                        return p.ClientFirmIds
+                             .Select(fId =>
                              {
-                                 ClientFirmId = long.Parse(fId),
-                                 p.Date,
-                                 WorkerId = long.Parse(p.WorkerId)
-                             };
-                         });
-                })
-                );
+                                 return new
+                                 {
+                                     ClientFirmId = fId,
+                                     p.Date,
+                                     p.WorkerId
+                                 };
+                             });
+                    })
+                    );
+                }
             }
         }
 

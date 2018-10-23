@@ -16,12 +16,21 @@ namespace Api.Web.Controllers
             {
                 new Food()
                 {
-                    FoodId = "pierwszy",
+                    FoodId = 1,
                     Price = 4.67,
                     Name = "bulka",
                     Description = null,
                     ImageURL = null,
                     IsVegan = true
+                },
+                new Food()
+                {
+                    FoodId = 2,
+                    Price = 1.87,
+                    Name = "chleb",
+                    Description = null,
+                    ImageURL = null,
+                    IsVegan = false
                 }
             };
         }
