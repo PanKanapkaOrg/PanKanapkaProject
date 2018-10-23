@@ -7,7 +7,7 @@ namespace Api.Domain.Components
 {
     public interface IReservationsRepository
     {
-        IEnumerable<Reservation> GetReservations(TasksFilter reservationsFilter);
+        IEnumerable<Reservation> GetReservations(ReservationFilter reservationsFilter);
 
         void DeleteReservations(IEnumerable<string> reservations);
     }
