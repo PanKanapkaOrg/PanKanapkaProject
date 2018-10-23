@@ -4,8 +4,8 @@ namespace Api.Domain.Models
 {
     public class Reservation
     {
-        public string ClientFirmId { get; set; }
-        public string ReservationId { get; set; }
+        public long ClientFirmId { get; set; }
+        public long ReservationId { get; set; }
         public bool IsActiveReservation { get; set; }
         public IEnumerable<ReservationItem> ReservationItems { get; set; }
     }
