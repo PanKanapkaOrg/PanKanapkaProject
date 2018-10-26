@@ -2,17 +2,24 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Api.Domain.Components
 {
-    public interface ITasksRepository
+    public interface IWorkerTasksRepository
     {
-        IEnumerable<Task> GetTasks(TasksFilter tasksFilter);
+        Task<IEnumerable<Models.Task>> GetTasks(TasksFilter tasksFilter);
+    }
 
-        void CreateTasks(IEnumerable<TaskCreationItem> tasksItems);
+    public interface IManagerTasksRepository
+    {
+        System.Threading.Tasks.Task CreateTasks(IEnumerable<TaskCreationItem> tasksItems);
 
-        void DeleteTasks(IEnumerable<string> taskIds);
+        System.Threading.Tasks.Task DeleteTasks(IEnumerable<string> taskIds);
+    }
 
+    public interface ITasksRepository : IWorkerTasksRepository, IManagerTasksRepository
+    {
     }
 }
 

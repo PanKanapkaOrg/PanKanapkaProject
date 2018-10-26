@@ -7,7 +7,7 @@ namespace Api.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FoodsController : Controller, IFoodsRepository
+    public class FoodsController : Controller
     {
         [HttpGet("{cateringFirmId}")]
         public IEnumerable<Food> GetFoods(string cateringFirmId)
