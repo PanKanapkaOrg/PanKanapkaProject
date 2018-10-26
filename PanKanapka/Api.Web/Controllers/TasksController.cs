@@ -10,7 +10,7 @@ namespace Api.Web.Controllers
     [ApiController]
     public class TasksController : Controller
     {
-        private List<Task> tasks = new List<Task>();
+        private List<WorkerTask> tasks = new List<WorkerTask>();
 
         ITasksRepository repo = new TasksRepository();
 
@@ -31,7 +31,7 @@ namespace Api.Web.Controllers
         }
 
         [HttpPost]
-        public IEnumerable<Task> GetTasks([FromBody] TasksFilter tasksFilter)
+        public IEnumerable<WorkerTask> GetTasks([FromBody] TasksFilter tasksFilter)
         {
             /*
              * foreach taskFilter.WorkersIds[n]
@@ -42,15 +42,15 @@ namespace Api.Web.Controllers
   where w.ID in ('workerIds') and t.taskDate in (datediff(DAY, 1, 'date'), 'date', dateadd(DAY, 1, 'date'))
              */
 
-            return new List<Task>
+            return new List<WorkerTask>
             {
                 GetTask()
             };
         }
 
-        private Task GetTask()
+        private WorkerTask GetTask()
         {
-            return new Task()
+            return new WorkerTask()
             {
                 Worker = new Worker()
                 {

@@ -8,7 +8,7 @@ namespace Api.Domain.Components
 {
     public interface IWorkerTasksRepository
     {
-        Task<IEnumerable<Models.Task>> GetTasks(TasksFilter tasksFilter);
+        Task<IEnumerable<Models.WorkerTask>> GetTasks(TasksFilter tasksFilter);
     }
 
     public interface IManagerTasksRepository

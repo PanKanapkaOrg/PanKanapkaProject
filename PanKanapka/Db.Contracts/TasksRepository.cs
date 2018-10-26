@@ -48,7 +48,7 @@ namespace Db.Contracts
             throw new System.NotImplementedException();
         }
 
-        public Task<IEnumerable<Api.Domain.Models.Task>> GetTasks(TasksFilter tasksFilter)
+        public Task<IEnumerable<Api.Domain.Models.WorkerTask>> GetTasks(TasksFilter tasksFilter)
         {
             throw new System.NotImplementedException();
         }
