@@ -15,7 +15,7 @@ namespace Api.Web.Controllers
             _workerRepository = new FakeWorkers();
         }
 
-        [HttpGet("/api/{controller}/{cateringFirmId}")]
+        [HttpGet("/api/[controller]/{cateringFirmId}")]
         public async Task<IEnumerable<Worker>> GetWorkersAsync(long cateringFirmId)
         {
             return await _workerRepository.GetWorkers(cateringFirmId);

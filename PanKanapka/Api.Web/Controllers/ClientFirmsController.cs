@@ -16,7 +16,7 @@ namespace Api.Web.Controllers
             _clientFirmsRepository = new FakeClientFirmsRepo();
         }
 
-        [HttpGet("/api/{controller}/{cateringFirmId}")]
+        [HttpGet("/api/[controller]/{cateringFirmId}")]
         public async Task<IEnumerable<ClientFirm>> GetClientFirms(long cateringFirmId)
         {
             return await _clientFirmsRepository.GetClientFirms(cateringFirmId);

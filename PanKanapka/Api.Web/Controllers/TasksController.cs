@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Web.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class TasksController : Controller
     {
@@ -14,7 +13,7 @@ namespace Api.Web.Controllers
 
         ITasksRepository repo = new TasksRepository();
 
-        [HttpPost("/create")]
+        [HttpPost("api/tasks/create")]
         public IActionResult CreateTasks([FromBody] IEnumerable<TaskCreationItem> tasksItems)
         {
             /* foreach(taskItems[n].ClientFirmsIs[n]
@@ -24,13 +23,13 @@ namespace Api.Web.Controllers
             return Ok();
         }
 
-        [HttpDelete("/delete")]
+        [HttpDelete("api/tasks/delete")]
         public void DeleteTasks(IEnumerable<string> taskIds)
         {
             //delete from Tasks where ID in (taskIds{})
         }
 
-        [HttpPost]
+        [HttpPost("api/tasks")]
         public IEnumerable<WorkerTask> GetTasks([FromBody] TasksFilter tasksFilter)
         {
             /*
