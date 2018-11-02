@@ -20,7 +20,7 @@ namespace Api.Web.Controllers
             _tasksRepository = tasksRepository;
         }
 
-        [HttpPost("/create")]
+        [HttpPost("api/[controller]/create")]
         public IActionResult CreateTasks([FromBody] IEnumerable<TaskCreationItem> tasksItems)
         {
             /* foreach(taskItems[n].ClientFirmsIs[n]
@@ -30,7 +30,7 @@ namespace Api.Web.Controllers
             return Ok();
         }
 
-        [HttpDelete("/delete")]
+        [HttpDelete("api/[controller]/delete")]
         public void DeleteTasks(IEnumerable<long> taskIds)
         {
             //delete from Tasks where ID in (taskIds{})
