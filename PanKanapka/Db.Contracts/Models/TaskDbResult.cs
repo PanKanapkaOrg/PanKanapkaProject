@@ -6,11 +6,14 @@ namespace Db.Contracts.Models
 {
     public class TaskDbResult
     {
-       /* select w.name, w.surname, t.taskDate, cf.logoUrl, cf.name, cf.address, t.isDone
-  from Tasks t
-  join Workers w on w.ID = t.workerID
-  join ClientFirms cf on cf.ID = t.clientFirmID
-  where w.ID in ('workerIds') and t.taskDate in (datediff(DAY, 1, 'date'), 'date', dateadd(DAY, 1, 'date'))
-  */
+        /* select w.name, w.surname, t.taskDate, cf.logoUrl, cf.name, cf.address, t.isDone  */
+        public long WorkerId { get; set; }
+        public string WorkerName { get; set; }
+        public string WorkerSurname { get; set; }
+        public DateTime TaskDate { get; set; }
+        public string LogoUrl { get; set; }
+        public string ClientFirmName { get; set; }
+        public string Address { get; set; }
+        public bool IsDone { get; set; }                
     }
 }

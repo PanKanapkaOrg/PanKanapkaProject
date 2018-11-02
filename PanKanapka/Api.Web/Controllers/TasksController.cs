@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Api.Domain.Components;
 using Api.Domain.Models;
 using Db.Contracts;
@@ -11,69 +13,37 @@ namespace Api.Web.Controllers
     {
         private List<WorkerTask> tasks = new List<WorkerTask>();
 
-        ITasksRepository repo = new TasksRepository();
+        ITasksRepository _tasksRepository;
 
-        [HttpPost("api/tasks/create")]
+        public TasksController(ITasksRepository tasksRepository)
+        {
+            _tasksRepository = tasksRepository;
+        }
+
+        [HttpPost("/create")]
         public IActionResult CreateTasks([FromBody] IEnumerable<TaskCreationItem> tasksItems)
         {
             /* foreach(taskItems[n].ClientFirmsIs[n]
              * insert into Tasks values(clinentFirmsIds[n], 0, convertToDate(tasksItems[n].Date), tasksItems[n].WorkerId
              */
-            repo.CreateTasks(tasksItems);
+            _tasksRepository.CreateTasks(tasksItems);
             return Ok();
         }
 
-        [HttpDelete("api/tasks/delete")]
-        public void DeleteTasks(IEnumerable<string> taskIds)
+        [HttpDelete("/delete")]
+        public void DeleteTasks(IEnumerable<long> taskIds)
         {
             //delete from Tasks where ID in (taskIds{})
+            _tasksRepository.DeleteTasks(taskIds);
         }
 
-        [HttpPost("api/tasks")]
-        public IEnumerable<WorkerTask> GetTasks([FromBody] TasksFilter tasksFilter)
+        [HttpPost("/api/[controller]")]
+        public async Task<IEnumerable<WorkerTask>> GetTasksAsync([FromBody] TasksFilter tasksFilter)
         {
             /*
              * foreach taskFilter.WorkersIds[n]
-             *   select w.name, w.surname, t.taskDate, cf.logoUrl, cf.name, cf.address, t.isDone
-  from Tasks t
-  join Workers w on w.ID = t.workerID
-  join ClientFirms cf on cf.ID = t.clientFirmID
-  where w.ID in ('workerIds') and t.taskDate in (datediff(DAY, 1, 'date'), 'date', dateadd(DAY, 1, 'date'))
-             */
-
-            return new List<WorkerTask>
-            {
-                GetTask()
-            };
-        }
-
-        private WorkerTask GetTask()
-        {
-            return new WorkerTask()
-            {
-                Worker = new Worker()
-                {
-                    Name = "Yevhenii",
-                    Surname = "kyshko"
-                },
-                TaskItems = new List<TaskItem>
-                {
-                    new TaskItem()
-                    {
-                        Date = "2009/10/05",
-                        Firms = new List<FirmTask>
-                        {
-                            new FirmTask()
-                            {
-                                LogoUrl = null,
-                                Name = "firm1",
-                                Address="addressFirm1",
-                                IsActiveTask = true
-                            }
-                        }
-                    }
-                }
-            };
+            */
+            return await _tasksRepository.GetTasks(tasksFilter);
         }
     }
 }

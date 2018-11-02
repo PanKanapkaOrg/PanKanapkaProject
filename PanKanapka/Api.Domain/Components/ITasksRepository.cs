@@ -15,7 +15,7 @@ namespace Api.Domain.Components
     {
         System.Threading.Tasks.Task CreateTasks(IEnumerable<TaskCreationItem> tasksItems);
 
-        System.Threading.Tasks.Task DeleteTasks(IEnumerable<string> taskIds);
+        System.Threading.Tasks.Task DeleteTasks(IEnumerable<long> taskIds);
     }
 
     public interface ITasksRepository : IWorkerTasksRepository, IManagerTasksRepository

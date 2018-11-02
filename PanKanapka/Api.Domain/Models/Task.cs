@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Api.Domain.Models
 {
@@ -18,7 +19,7 @@ namespace Api.Domain.Models
 
     public class TaskItem
     {
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public IEnumerable<FirmTask> Firms { get; set; }
     }
 }
