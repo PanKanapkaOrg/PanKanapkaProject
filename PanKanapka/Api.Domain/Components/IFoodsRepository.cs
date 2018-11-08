@@ -6,6 +6,6 @@ namespace Api.Domain.Components
 {
     public interface IFoodsRepository
     {
-        Task<IEnumerable<Food>> GetFoods(string cateringFirmId);
+        Task<IEnumerable<Food>> GetFoods(long cateringFirmId);
     }
 }

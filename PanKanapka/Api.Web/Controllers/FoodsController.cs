@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Api.Domain.Components;
 using Api.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,30 +10,16 @@ namespace Api.Web.Controllers
     [ApiController]
     public class FoodsController : Controller
     {
-        [HttpGet("{cateringFirmId}")]
-        public IEnumerable<Food> GetFoods(string cateringFirmId)
+        private IFoodsRepository _foodsRepository;
+        public FoodsController(IFoodsRepository foodsRepository)
         {
-            return new List<Food>
-            {
-                new Food()
-                {
-                    FoodId = 1,
-                    Price = 4.67,
-                    Name = "bulka",
-                    Description = null,
-                    ImageURL = null,
-                    IsVegan = true
-                },
-                new Food()
-                {
-                    FoodId = 2,
-                    Price = 1.87,
-                    Name = "chleb",
-                    Description = null,
-                    ImageURL = null,
-                    IsVegan = false
-                }
-            };
+            _foodsRepository = foodsRepository;       
+        }
+
+        [HttpGet("{cateringFirmId}")]
+        public async Task<IEnumerable<Food>> GetFoods(long cateringFirmId)
+        {
+            return await _foodsRepository.GetFoods(cateringFirmId);
         }
     }
 }

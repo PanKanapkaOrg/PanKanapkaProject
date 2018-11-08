@@ -9,11 +9,11 @@ namespace Api.Web.Controllers
 {
     public class ClientFirmsController : Controller
     {
-        private readonly IClientFirmsRepository _clientFirmsRepository;
+        private IClientFirmsRepository _clientFirmsRepository;
 
-        public ClientFirmsController()
+        public ClientFirmsController(IClientFirmsRepository clientFirmsRepository)
         {
-            _clientFirmsRepository = new FakeClientFirmsRepo();
+            _clientFirmsRepository = clientFirmsRepository;
         }
 
         [HttpGet("/api/[controller]/{cateringFirmId}")]
@@ -23,13 +23,5 @@ namespace Api.Web.Controllers
         }
     }
 
-    class FakeClientFirmsRepo : IClientFirmsRepository
-    {
-        public Task<IEnumerable<ClientFirm>> GetClientFirms(long cateringFirmId)
-        {
-            IEnumerable<ClientFirm> firms = new List<ClientFirm>();
-
-            return Task.FromResult(firms);
-        }
-    }
+    
 }

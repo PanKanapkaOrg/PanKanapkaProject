@@ -10,9 +10,9 @@ namespace Api.Web.Controllers
     {
         private IWorkersRepository _workerRepository;
 
-        public WorkersController()
+        public WorkersController(IWorkersRepository workersRepository)
         {
-            _workerRepository = new FakeWorkers();
+            _workerRepository = workersRepository;
         }
 
         [HttpGet("/api/[controller]/{cateringFirmId}")]
@@ -22,13 +22,4 @@ namespace Api.Web.Controllers
         }
     }
 
-    class FakeWorkers : IWorkersRepository
-    {
-        public Task<IEnumerable<Worker>> GetWorkers(long cateringFirmId)
-        {
-            IEnumerable<Worker> workers = new List<Worker>();
-
-            return Task.FromResult(workers);
-        }
-    }
 }

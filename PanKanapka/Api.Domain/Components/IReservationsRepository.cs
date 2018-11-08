@@ -8,6 +8,6 @@ namespace Api.Domain.Components
     {
         Task<IEnumerable<Reservation>> GetReservations(ReservationFilter reservationsFilter);
 
-        System.Threading.Tasks.Task DeleteReservations(IEnumerable<string> reservations);
+        System.Threading.Tasks.Task DeleteReservations(IEnumerable<long> reservationIds);
     }
 }

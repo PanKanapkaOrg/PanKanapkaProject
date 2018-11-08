@@ -8,39 +8,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Web.Controllers
 {
+    [ApiController]
     public class ReservationsController : Controller
     {
-        public void DeleteReservations(IEnumerable<string> reservations)
+        private IReservationsRepository _reservationsRepository;
+        public ReservationsController(IReservationsRepository reservationsRepository)
         {
-            throw new NotImplementedException();
+            _reservationsRepository = reservationsRepository;
         }
 
-        public IEnumerable<Reservation> GetReservations(ReservationFilter reservationsFilter)
+        [HttpDelete("api/[controller]/delete")]
+        public void DeleteReservations(IEnumerable<long> reservations)
         {
-            return new List<Reservation>
-            {
-                new Reservation()
-                {
-                    ClientFirmId = 13124,
-                    ReservationId = 1231,
-                    IsActiveReservation = true,
-                    ReservationItems = new List<ReservationItem>
-                    {
-                        new ReservationItem()
-                        {
-                            Name = "bulka",
-                            PriceTotal = 456.34,
-                            ItemImageUrl = null,
-                            Quantity = 3
-                        }
-                    }
-                }
-            };
+            _reservationsRepository.DeleteReservations(reservations);
         }
 
-        public IActionResult Index()
+        [HttpPost("/api/[controller]")]
+        public async Task<IEnumerable<Reservation>> GetReservationsAsync(ReservationFilter reservationsFilter)
         {
-            return View();
+            return await _reservationsRepository.GetReservations(reservationsFilter);
         }
+
     }
 }

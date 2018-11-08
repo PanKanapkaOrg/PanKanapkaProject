@@ -36,7 +36,11 @@ namespace Api.Web
                 }));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IDbConnection>(p=>new SqlConnection(@"Integrated Security = SSPI; Persist Security Info = False; Initial Catalog = PanKanapka; Data Source =.\SQLEXPRESS;"));
-            services.AddScoped<ITasksRepository, TasksDbRepository>();
+            services.AddScoped<IWorkersRepository, WorkersDbRepository>();
+            services.AddScoped<IReservationsRepository, ReservationsDbRepository>();
+            services.AddScoped<IFoodsRepository, FoodsDbRepository>();
+            services.AddScoped<IClientFirmsRepository, ClientFirmsDbRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

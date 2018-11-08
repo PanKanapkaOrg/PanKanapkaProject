@@ -6,7 +6,6 @@ namespace Db.Contracts.Models
 {
     public class TaskDbResult
     {
-        /* select w.name, w.surname, t.taskDate, cf.logoUrl, cf.name, cf.address, t.isDone  */
         public long WorkerId { get; set; }
         public string WorkerName { get; set; }
         public string WorkerSurname { get; set; }
