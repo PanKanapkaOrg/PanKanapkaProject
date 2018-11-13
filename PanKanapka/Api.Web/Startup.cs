@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -40,7 +40,7 @@ namespace Api.Web
             services.AddScoped<IReservationsRepository, ReservationsDbRepository>();
             services.AddScoped<IFoodsRepository, FoodsDbRepository>();
             services.AddScoped<IClientFirmsRepository, ClientFirmsDbRepository>();
-
+            services.AddScoped<ITasksRepository, TasksDbRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
