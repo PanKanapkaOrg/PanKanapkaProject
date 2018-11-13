@@ -73,7 +73,7 @@ namespace Db.Contracts
                 from Tasks t 
                 join Workers w on w.ID = t.workerID 
                 join ClientFirms cf on cf.ID = t.clientFirmID 
-                where w.ID in (@workerIds) and t.taskDate between CONVERT(DATETIME, @Date, 102)-@DaysBefore and CONVERT(DATETIME, @Date, 102)+@DaysAfter; ";
+                where w.ID in @workerIds and t.taskDate between CONVERT(DATETIME, @Date, 102)-@DaysBefore and CONVERT(DATETIME, @Date, 102)+@DaysAfter; ";
 
             using (dbConn)
             {
