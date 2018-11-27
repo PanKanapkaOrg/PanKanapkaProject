@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import "./Login.css";
-import Routes from "./../Routes";
 import { Redirect } from 'react-router-dom'
 
 export default class Login extends Component {
@@ -31,14 +29,13 @@ export default class Login extends Component {
     try {
       if (this.state.email == "mateusz@wp.pl" && this.state.password == "12345") {
 
-        this.props.set  
+        this.props.setAppStateProperty("isAuthenticated", true); 
+        this.props.setAppStateProperty("authId", 1); 
+        this.props.setAppStateProperty("cateringFirmId", 1); 
 
-        this.props.userHasAuthenticated(true);
-        this.props.setAuthId(1);
-        this.props.setCateringFirmId(2);
-        this.props.setName("Mateusz");
-        this.props.setSurname("Sudak");
-        this.props.setCateringFirmName("Kanapka w pracy");
+        this.props.setAppStateProperty("managerName", "Mateusz"); 
+        this.props.setAppStateProperty("manageSurname", "Sudak"); 
+        this.props.setAppStateProperty("cateringFirmName", "Kanapka w pracy"); 
       }
       else {
         this.state.authError = 'Błędne dane do zalogowania.';
@@ -55,11 +52,6 @@ export default class Login extends Component {
     return (
 
       <div className="Login">
-        {this.props.isAuthenticated
-          ?
-          <Routes /> :
-          <Fragment></Fragment>
-        }
         <form className="white" onSubmit={this.handleSubmit}>
           <div className="input-field">
             <label htmlFor="email">Adress email</label>

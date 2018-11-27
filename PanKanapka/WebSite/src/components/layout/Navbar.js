@@ -1,49 +1,31 @@
-import React, { Component} from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
+const Navbar = (props) => {
+  let right;
+  let left;
 
-//const Navbar = ( childProps) => {
-//  const { isAuthenticated } = childProps;
-
-export default class Navbar extends Component {
-    constructor(props){
-        super(props);
-    }
-
-  render() {
-    if (this.props.isAuthenticated) 
-    return(
-    <nav>
-          <div className="nav-wrapper">
-            <a href="#" className="brand-logo"><Link to="/">Pan Kanapka</Link></a>
-            {console.log(this.props.isAuthenticated)}
-            <ul id="nav-mobile" className="right hide-on-med-and-down">
-           
-                       
-              <li onClick={this.handleLogout}>Wyloguj się</li>
-              
-            </ul>
-          </div>
-        </nav>
-    );
-  return(
-    <nav>
-          <div className="nav-wrapper">
-            <a href="#" className="brand-logo"><Link to="/">Pan Kanapka</Link></a>
-            {console.log(this.props.isAuthenticated)}
-            <ul id="nav-mobile" className="right hide-on-med-and-down">
-                
-                  
-                 
-                <li><Link to="/login">Zaloguj się</Link></li>
-
-              
-            </ul>
-          </div>
-        </nav>
-    );
+  if (props.isAuthenticated) {
+    right = <li onClick={props.handleLogout}>Wyloguj się</li>;
+  } else {
+    right = <li><Link to="/login">Zaloguj się</Link></li>;
   }
+
+  return (
+    <nav>
+      <div className="nav-wrapper">
+        <ul id="nav-mobile" className="left hide-on-med-and-down">
+          <li><Link to="/" >Pan Kanapka</Link></li>
+          <li><Link to="/firm">Firma</Link></li>
+          <li><Link to="/plans">Plany</Link></li>
+        </ul>
+        <ul id="nav-mobile" className="right hide-on-med-and-down">
+          {right}
+        </ul>
+      </div>
+    </nav>
+  );
+
 }
 
-
-//export default Navbar
+export default Navbar

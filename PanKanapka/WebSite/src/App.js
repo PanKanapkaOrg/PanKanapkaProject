@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 
@@ -12,70 +12,39 @@ class App extends Component {
 
     this.state = {
       isAuthenticated: false,
-      Role: null,
-      AuthID: null,
-      CateringFirmId: null,
-      Name: null,
-      Surname: null,
-      CateringFirmName: null
+      role: null,
+      authId: null,
+      cateringFirmId: null,
+      managerName: null,
+      manageSurname: null,
+      cateringFirmName: null
     };
   }
 
-  userHasAuthenticated = authenticated => {
-    this.setState({ isAuthenticated: authenticated });
-  }
-
-  setAuthId = Id => {
-    this.setState({ AuthID: Id });
-  }
-
-  setCateringFirmId = Id => {
-    this.setState({ CateringFirmId: Id });
-  }
-
-  setName = n => {
-    this.setState({ Name: n });
-  }
-
-  setSurname = sn => {
-    this.setState({ Surname: sn });
-  }
-
-  setCateringFirmName = n => {
-    this.setState({ CateringFirmName: n });
-  }
-
-  setAppStateProperty = (propertyName, value) => {
-    console.log(this.state[propertyName]);
-    console.log(value);
-        this.state[propertyName] = value;
-  }
-
-  handleLogout = event => {
-    this.userHasAuthenticated(false);
+  setAppStateProperty = (property, value) => {
+    if(this.state.hasOwnProperty(property)) {
+      var updatedState = this.state;
+      updatedState[property] = value;
+      this.setState(updatedState);
+    }
+    else {
+      console.log('Property is not exist in App state ' + property);
+    }
   }
 
   render() {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
-      CateringFirmName:this.state.CateringFirmName, 
-      CateringFirmId:this.state.CateringFirmId,
+      cateringFirmName: this.state.cateringFirmName, 
+      cateringFirmId: this.state.cateringFirmId,
       
-      setAppStateProperty: this.setAppStateProperty,
-
-      userHasAuthenticated: this.userHasAuthenticated, 
-      setAuthId: this.setAuthId,
-      setCateringFirmId: this.setCateringFirmId,
-      setName: this.setName,
-      setSurname: this.setSurname,
-      setCateringFirmName: this.setCateringFirmName
+      setAppStateProperty: this.setAppStateProperty
     };
-
 
     return (
       <BrowserRouter>
         <div className="App">
-          <Navbar  childProps={childProps}/>
+          <Navbar  isAuthenticated={childProps.isAuthenticated} handleLogout={() => this.setAppStateProperty("isAuthenticated",false)}/>
           <Routes  childProps={childProps}/>
           <Footer  childProps={childProps} />
          

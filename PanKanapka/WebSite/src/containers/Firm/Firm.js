@@ -1,44 +1,36 @@
 import React, { Component } from "react";
-import "./Home.css";
+import GetClientFirms from "../services/api/GetClientFirms";
+import GetWorkers from "../services/api/GetWorkers";
+
+import "./Firm.css";
 
 export default class Home extends Component {
     constructor(props) {
         super(props);
-
 
         this.state = {
             ClientFirms: [],
             Workers: [],
         };
     }
+
     componentDidMount() {
-        fetch('http://localhost:5000/api/ClientFirms/' + this.props.CateringFirmId)
-            .then((response) => response.json())
-            .then((findresponse) => {
-                console.log(findresponse)
-                this.setState({
-                    ClientFirms: findresponse,
-                })
-            })
-        fetch('http://localhost:5000/api/Workers/' + this.props.CateringFirmId)
-            .then((response) => response.json())
-            .then((findresponse) => {
-                console.log(findresponse)
-                this.setState({
-                    Workers: findresponse,
-                })
-            })
+        GetClientFirms(this.props)
+                .then(firms => this.setState({ClientFirms:firms}));
+        GetWorkers(this.props)
+                .then(workers => this.setState({Workers:workers}));
     }
+    
     render() {
-        if (this.props.isAuthenticated) return (
+           return (
             <div className="Home">
                 <div className="lander">
-                    <img src="/logo.png"></img>
-                    <h1>    {this.props.CateringFirmName}  </h1>
-                    <img src="/logo.png"></img>
+                    <img src="/logo.png" alt="logo"></img>
+                    <h1>    {this.props.cateringFirmName}  </h1>
+                    <img src="/logo.png" alt="logo"></img>
                     <div>
 
-                        <table class="striped">
+                        <table className="striped">
                             <thead>
                                 <tr><th><h5>Firmy, z którymi współpracujesz</h5></th></tr>
                                 <tr>
@@ -47,9 +39,8 @@ export default class Home extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-
                                 {
-                                    this.state.ClientFirms.map((ClientFirms, i) =>
+                                    this.state.ClientFirms.map((ClientFirms) =>
                                         <tr>
                                             <td>
                                                 <p key={ClientFirms.id}>{ClientFirms.name}</p>
@@ -60,11 +51,10 @@ export default class Home extends Component {
                                         </tr>
                                     )
                                 }
-
                             </tbody>
 
                         </table>
-                        <table class="striped">
+                        <table className="striped">
 
                             <thead>
                                 <tr><th><h5>Twoi pracownicy</h5></th></tr>
@@ -93,15 +83,6 @@ export default class Home extends Component {
                     </div>
                 </div>
             </div>
-
         )
-        return (
-            <div className="Home">
-                <div className="lander">
-                    <h1>Witaj w serwisie Pan Kanapka</h1>
-                    <p>Zaloguj się aby przejść do panelu managera</p>
-                </div>
-            </div>
-        );
     }
 }
