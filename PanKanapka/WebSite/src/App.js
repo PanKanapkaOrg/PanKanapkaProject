@@ -45,6 +45,12 @@ class App extends Component {
     this.setState({ CateringFirmName: n });
   }
 
+  setAppStateProperty = (propertyName, value) => {
+    console.log(this.state[propertyName]);
+    console.log(value);
+        this.state[propertyName] = value;
+  }
+
   handleLogout = event => {
     this.userHasAuthenticated(false);
   }
@@ -52,10 +58,12 @@ class App extends Component {
   render() {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
-      userHasAuthenticated: this.userHasAuthenticated, 
-
       CateringFirmName:this.state.CateringFirmName, 
-      CateringFirmId:this.state.CateringFirmId,  
+      CateringFirmId:this.state.CateringFirmId,
+      
+      setAppStateProperty: this.setAppStateProperty,
+
+      userHasAuthenticated: this.userHasAuthenticated, 
       setAuthId: this.setAuthId,
       setCateringFirmId: this.setCateringFirmId,
       setName: this.setName,

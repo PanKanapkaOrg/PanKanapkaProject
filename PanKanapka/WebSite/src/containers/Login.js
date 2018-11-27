@@ -11,8 +11,7 @@ export default class Login extends Component {
     this.state = {
       email: "",
       password: "",
-      authError: "",
-      // CateringFirmName=""
+      authError: ""
     };
   }
 
@@ -31,6 +30,9 @@ export default class Login extends Component {
 
     try {
       if (this.state.email == "mateusz@wp.pl" && this.state.password == "12345") {
+
+        this.props.set  
+
         this.props.userHasAuthenticated(true);
         this.props.setAuthId(1);
         this.props.setCateringFirmId(2);
