@@ -14,10 +14,10 @@ class App extends Component {
       isAuthenticated: false,
       Role: null,
       AuthID: null,
-      CateringFrimId: null,
+      CateringFirmId: null,
       Name: null,
       Surname: null,
-      CateringFrimName: null
+      CateringFirmName: null
     };
   }
 
@@ -29,8 +29,8 @@ class App extends Component {
     this.setState({ AuthID: Id });
   }
 
-  setCateringFrimId = Id => {
-    this.setState({ CateringFrimId: Id });
+  setCateringFirmId = Id => {
+    this.setState({ CateringFirmId: Id });
   }
 
   setName = n => {
@@ -41,27 +41,26 @@ class App extends Component {
     this.setState({ Surname: sn });
   }
 
-  setCateringFrimName = n => {
-    this.setState({ CateringFrimName: n });
+  setCateringFirmName = n => {
+    this.setState({ CateringFirmName: n });
   }
 
   handleLogout = event => {
     this.userHasAuthenticated(false);
   }
 
-
-
-
   render() {
     const childProps = {
       isAuthenticated: this.state.isAuthenticated,
       userHasAuthenticated: this.userHasAuthenticated, 
-      CateringFrimName:this.state.CateringFrimName,   
+
+      CateringFirmName:this.state.CateringFirmName, 
+      CateringFirmId:this.state.CateringFirmId,  
       setAuthId: this.setAuthId,
-      setCateringFrimId: this.setCateringFrimId,
+      setCateringFirmId: this.setCateringFirmId,
       setName: this.setName,
       setSurname: this.setSurname,
-      setCateringFrimName: this.setCateringFrimName
+      setCateringFirmName: this.setCateringFirmName
     };
 
 
