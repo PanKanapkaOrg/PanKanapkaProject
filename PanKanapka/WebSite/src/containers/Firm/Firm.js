@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import GetClientFirms from "../services/api/GetClientFirms";
 import GetWorkers from "../services/api/GetWorkers";
+import CircularSpinnerLoading from "../CircularSpinnerLoading";
+
 
 import "./Firm.css";
 
@@ -9,6 +11,7 @@ export default class Home extends Component {
         super(props);
 
         this.state = {
+            isLoading: true,
             ClientFirms: [],
             Workers: [],
         };
@@ -18,10 +21,17 @@ export default class Home extends Component {
         GetClientFirms(this.props)
                 .then(firms => this.setState({ClientFirms:firms}));
         GetWorkers(this.props)
-                .then(workers => this.setState({Workers:workers}));
+                .then(workers =>{
+                    window.setTimeout(() => this.setState({Workers:workers, isLoading:false}), 1500);
+            });
     }
-    
+
     render() {
+        if(this.state.isLoading)
+        {
+            return <div className="lander"><CircularSpinnerLoading /> </div>
+        }
+        else {
            return (
             <div className="Home">
                 <div className="lander">
@@ -84,5 +94,7 @@ export default class Home extends Component {
                 </div>
             </div>
         )
+        
     }
+}
 }
