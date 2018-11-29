@@ -67,7 +67,7 @@ namespace Db.Contracts
 
         public async Task<IEnumerable<Api.Domain.Models.WorkerTask>> GetTasks(TasksFilter tasksFilter)
         {
-            string getTaskSqlQuery = 
+            string getTaskSqlQuery =
                 @"select w.ID as WorkerId, w.name as WorkerName, w.surname as WorkerSurname, t.taskDate as TaskDate, cf.logoUrl as LogoUrl, 
                 cf.name as ClientFirmName, cf.address as Address, t.isDone as IsDone 
                 from Tasks t 
@@ -84,7 +84,7 @@ namespace Db.Contracts
                 }
 
                 IEnumerable<TaskDbResult> tasks = dbConn.Query<TaskDbResult>(getTaskSqlQuery, tasksFilter);
-                IEnumerable<WorkerTask> workerTasks = tasks.GroupBy(
+                List<WorkerTask> workerTasks = tasks.GroupBy(
                 dbTask => new Worker()
                 {
                     Id = dbTask.WorkerId,
@@ -112,9 +112,33 @@ namespace Db.Contracts
                                     })
                         })
                     }
-                );
+                ).ToList();
+
+                List<DateTime> dateRange = 
+                    DateRange(
+                        from: tasksFilter.Date.Subtract(TimeSpan.FromDays(tasksFilter.DaysBefore)), 
+                        forDays:tasksFilter.DaysAfter+tasksFilter.DaysBefore).ToList();
+
+                for (int i = 0; i < workerTasks.Count; i++)
+                {
+                        var daysThatNotExist = dateRange
+                        .Where(d => !workerTasks[i].TaskItems.Any(ti => ti.Date == d))
+                        .Select(d => new TaskItem(){
+                            Date = d,
+                            Firms = new List<FirmTask>(0)
+                        }).ToList();
+
+                    workerTasks[i].TaskItems = workerTasks[i].TaskItems.Concat(daysThatNotExist);
+                }
+
                 return workerTasks;
             }
+        }
+
+        private IEnumerable<DateTime> DateRange(DateTime from, int forDays)
+        {
+            return Enumerable.Range(0, forDays + 1)
+                             .Select(d => from.AddDays(d));
         }
     }
 }

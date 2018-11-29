@@ -6,7 +6,7 @@ namespace Api.Domain.Models
     public class TasksFilter
     {
         public IEnumerable<long> WorkerIds { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public int DaysBefore { get; set; }
         public int DaysAfter { get; set; }
     }
