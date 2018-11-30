@@ -261,3 +261,36 @@ join Workers w on w.ID = t.workerID join ClientFirms cf on cf.ID = t.clientFirmI
 where w.ID in (1,2,3) and t.taskDate between CONVERT(DATETIME, '2018-10-27', 102)-1 and CONVERT(DATETIME, '2018-10-27', 102)+1; 
 
 
+--Procedura logowania
+create or alter procedure LoginProcedure @mail varchar(50), @password varchar(50)
+as
+begin
+	declare @role varchar(20);
+	declare @auth bigint;
+
+	select @role = role, @auth = ID
+	from Authentication 
+	where mail=@mail and pass=@password;
+	
+	if @role = 'Manager'  
+	begin
+		select @auth as AuthId, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
+		from Managers
+		where AuthID = @auth
+	end
+	else if @role = 'Worker'
+	begin
+		select @auth as AuthID, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
+		from Workers
+		where AuthID = @auth
+	end
+	else if @role ='Client'
+	begin
+		select @auth as AuthId, @role as Role, name as Name, surname as Surname, ClientFirmID as FirmId 
+		from Clients
+		where AuthID = @auth
+	end
+end
+
+
+

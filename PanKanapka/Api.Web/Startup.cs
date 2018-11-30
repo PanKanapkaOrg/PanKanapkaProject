@@ -41,6 +41,7 @@ namespace Api.Web
             services.AddScoped<IFoodsRepository, FoodsDbRepository>();
             services.AddScoped<IClientFirmsRepository, ClientFirmsDbRepository>();
             services.AddScoped<ITasksRepository, TasksDbRepository>();
+            services.AddScoped<ILoginRepository, LoginDbRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +53,7 @@ namespace Api.Web
             }
 
             app.UseCors("AllowAllOrigins");
+            app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
         }
     }
