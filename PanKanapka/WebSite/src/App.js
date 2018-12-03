@@ -16,7 +16,7 @@ class App extends Component {
       authId: null,
       cateringFirmId: null,
       managerName: null,
-      manageSurname: null,
+      managerSurname: null,
       cateringFirmName: null
     };
   }
@@ -37,14 +37,15 @@ class App extends Component {
       isAuthenticated: this.state.isAuthenticated,
       cateringFirmName: this.state.cateringFirmName, 
       cateringFirmId: this.state.cateringFirmId,
-      
+      managerName: this.state.managerName,
+      managerSurname: this.state.managerSurname,
       setAppStateProperty: this.setAppStateProperty
     };
 
     return (
       <BrowserRouter>
         <div className="App">
-          <Navbar  isAuthenticated={childProps.isAuthenticated} handleLogout={() => this.setAppStateProperty("isAuthenticated",false)}/>
+          <Navbar  isAuthenticated={childProps.isAuthenticated} managerName={childProps.managerName} managerSurname={childProps.managerSurname} handleLogout={() => this.setAppStateProperty("isAuthenticated",false)}/>
           <Routes  childProps={childProps}/>
           <Footer  childProps={childProps} />
          

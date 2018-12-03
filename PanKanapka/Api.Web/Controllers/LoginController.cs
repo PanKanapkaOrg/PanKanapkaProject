@@ -18,7 +18,7 @@ namespace Api.Web.Controllers
         }
 
         [HttpPost("/api/[controller]")]
-        public async Task<Login> GetLoginData([FromQuery]string mail, [FromQuery]string password, string from)
+        public async Task<Login> GetLoginData([FromQuery]string mail, [FromQuery]string password, [FromQuery]string from)
         {
             Login loginData = await _loginRepository.GetLoginData(mail, password);
             if (from == "web" && loginData.Role!="Manager")
