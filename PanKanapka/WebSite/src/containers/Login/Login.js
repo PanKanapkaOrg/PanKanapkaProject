@@ -1,11 +1,13 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import "./Login.css";
 import { Redirect } from 'react-router-dom'
+import GetLoginData from "../services/api/GetLoginData";
 
 export default class Login extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
-
     this.state = {
       email: "",
       password: "",
@@ -27,34 +29,46 @@ export default class Login extends Component {
     event.preventDefault();
 
     try {
-      if (this.state.email == "mateusz@wp.pl" && this.state.password == "12345") {
 
-        this.props.setAppStateProperty("isAuthenticated", true); 
-        this.props.setAppStateProperty("authId", 1); 
-        this.props.setAppStateProperty("cateringFirmId", 1); 
+      GetLoginData(this.state)
+        .then((response) => {
+          if (response.status !== 200) {
+            console.log(response.text())
+            this.setState({ authError: "Błędny login lub hasło" })
+          }
+          else {
+            return response.json()
+          }
+        })
+        .then((login) => {
+          if (login != null) {
+            this.props.setAppStateProperty("authId", login.authId);
+            this.props.setAppStateProperty("cateringFirmId", login.firmId);
 
-        this.props.setAppStateProperty("managerName", "Mateusz"); 
-        this.props.setAppStateProperty("manageSurname", "Sudak"); 
-        this.props.setAppStateProperty("cateringFirmName", "Kanapka w pracy"); 
-      }
-      else {
-        this.state.authError = 'Błędne dane do zalogowania.';
-      }
+            this.props.setAppStateProperty("managerName", login.name);
+            this.props.setAppStateProperty("manageSurname", login.surname);
+            this.props.setAppStateProperty("cateringFirmName", "Kanapka w pracy");
+
+            this.props.setAppStateProperty("isAuthenticated", true);
+          }
+        })
+
     } catch (e) {
 
       alert(e.message);
     }
+
   }
 
   render() {
     const { authError } = this.props;
-    if (this.props.isAuthenticated) return <Redirect to='/' />
+    if (this.props.isAuthenticated) return <Redirect to='/firm' />
     return (
 
       <div className="Login">
         <form className="white" onSubmit={this.handleSubmit}>
           <div className="input-field">
-            <label htmlFor="email">Adress email</label>
+            <label >Adress email</label>
             <input type="email" id='email' onChange={this.handleChange} />
           </div>
 
@@ -81,6 +95,5 @@ export default class Login extends Component {
 
     );
   }
-
 
 }
