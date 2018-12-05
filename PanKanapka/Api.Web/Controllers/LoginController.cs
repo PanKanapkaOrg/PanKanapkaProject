@@ -21,13 +21,13 @@ namespace Api.Web.Controllers
         public async Task<Login> GetLoginData([FromQuery]string mail, [FromQuery]string password, [FromQuery]string from)
         {
             Login loginData = await _loginRepository.GetLoginData(mail, password);
+            if (loginData == null)
+                throw new UnauthorizedAccessException("Błędny login lub hasło.");
             if (from == "web" && loginData.Role!="Manager")
             {
                 throw new UnauthorizedAccessException("Logowanie tylko dla managerow");
             }
             
-            if (loginData == null)
-                throw new UnauthorizedAccessException("Błędny login lub hasło.");
             return loginData;
         }
     }

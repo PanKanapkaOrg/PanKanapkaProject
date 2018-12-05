@@ -23,11 +23,19 @@ namespace Db.Contracts
             using (DbConn)
             {
                 DbConn.Open();
-                if(DbConn.State!= ConnectionState.Open)
+                if (DbConn.State != ConnectionState.Open)
                 {
                     throw new Exception("Nie udało się polączyć z bazą");
                 }
-                IEnumerable<Login> loginData = DbConn.Query<Login>(getLoginDataProcedure,new { mail, password }, commandType: CommandType.StoredProcedure);
+                var loginData = DbConn.Query<Login, Firm, Login>(getLoginDataProcedure,
+                    (login, firm) =>
+                    {
+                        login.Firm = firm;
+                        return login;
+                    },
+                    new { mail, password },
+                    splitOn: "FirmId, FirmName",
+                    commandType: CommandType.StoredProcedure);
                 return loginData.FirstOrDefault();
             }
         }

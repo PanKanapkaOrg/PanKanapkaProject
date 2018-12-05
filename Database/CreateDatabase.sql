@@ -1,4 +1,4 @@
-USE master
+﻿USE master
 GO
 IF EXISTS (
   SELECT name
@@ -265,29 +265,28 @@ where w.ID in (1,2,3) and t.taskDate between CONVERT(DATETIME, '2018-10-27', 102
 create or alter procedure LoginProcedure @mail varchar(50), @password varchar(50)
 as
 begin
-	declare @role varchar(20);
-	declare @auth bigint;
-
-	select @role = role, @auth = ID
-	from Authentication 
-	where mail=@mail and pass=@password;
-	
 	if @role = 'Manager'  
 	begin
-		select @auth as AuthId, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
-		from Managers
+		select @auth as AuthId, @role as Role, m.name as Name, m.surname as Surname, CateringFirmID as FirmId,
+		c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, c.DayOfWork as DayOfWork
+		from Managers m
+		join CateringFirms c on m.CateringFirmID=c.ID 
 		where AuthID = @auth
 	end
 	else if @role = 'Worker'
 	begin
-		select @auth as AuthID, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
-		from Workers
+		select @auth as AuthID, @role as Role, w.name as Name, surname as Surname, CateringFirmID as FirmId,
+		c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, c.DayOfWork as DayOfWork
+		from Workers w
+		join CateringFirms c on w.CateringFirmID=c.ID 
 		where AuthID = @auth
 	end
 	else if @role ='Client'
 	begin
-		select @auth as AuthId, @role as Role, name as Name, surname as Surname, ClientFirmID as FirmId 
-		from Clients
+		select @auth as AuthId, @role as Role, cl.name as Name, surname as Surname, ClientFirmID as FirmId,
+		c.name as FirmName, c.address as Address, null as Info, c.logoUrl as LogoUrl, null as DayOfWork
+		from Clients cl
+		join ClientFirms c on cl.clientFirmID=c.ID 
 		where AuthID = @auth
 	end
 end

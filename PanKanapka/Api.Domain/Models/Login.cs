@@ -11,5 +11,6 @@ namespace Api.Domain.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Role { get; set; }
+        public Firm Firm { get; set; }
     }
 }
