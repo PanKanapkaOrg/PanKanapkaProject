@@ -11,7 +11,8 @@ export default class Plans extends Component {
         this.state = {
             isLoading: true,
             ClientFirms: [],
-            Workers: []
+            Workers: [],
+            Tasks: []
         };
     }
 
@@ -19,7 +20,7 @@ export default class Plans extends Component {
     componentDidMount() {
 
         GetClientFirms(this.props)
-           .then(firms => this.setState({ ClientFirms: firms }));
+            .then(firms => this.setState({ ClientFirms: firms }));
         GetWorkers(this.props)
             .then(workers => {
                 var taskFilter = {
@@ -31,7 +32,7 @@ export default class Plans extends Component {
 
                 GetTasks(taskFilter)
                     .then(tasks => {
-                        window.setTimeout(() => this.setState({ Tasks: tasks, Workers: workers, isLoading: false }), 1500);
+                        window.setTimeout(() => this.setState({ Tasks: tasks.data, Workers: workers, isLoading: false }), 1500);
                     });
             });
 
@@ -45,11 +46,57 @@ export default class Plans extends Component {
             return <CircularSpinnerLoading />
         }
         else {
+            console.log("Tasks is = ", Array.isArray(this.state.Tasks));
+            if (Array.isArray(this.state.Tasks)) {
+                console.log(this.state.ClientFirms);
+                console.log(this.state.Tasks);
+            }
             return (
                 <div className="Home">
                     <div className="lander">
                         <h1>Plany dla pracowników</h1>
-                        <p>Lista</p>
+                        <table className="striped">
+                            <thead>
+                                <tr>
+                                    <th>Pracownik</th>
+                                    {
+                                        this.state.Tasks[0].taskItems.map((item) =>
+                                            <th>
+                                                {item.date.substring(0, 10)}
+                                            </th>
+                                        )
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    this.state.Tasks.map((task) =>
+                                        <tr>
+
+                                            <td>
+                                                {task.worker.name} {task.worker.surname}
+                                            </td>
+                                            {
+                                                task.taskItems.map((taskItem) =>
+                                                    <td>
+                                                        <ul>
+
+                                                            {taskItem.firms.map((firm) =>
+                                                                <li>{firm.name}</li>
+                                                            )}
+                                                        </ul>
+                                                    </td>
+                                                )
+                                            }
+                                        </tr>
+                                    )
+                                }
+                            </tbody>
+
+                        </table>
+
+
+
                     </div>
                 </div>
             );
