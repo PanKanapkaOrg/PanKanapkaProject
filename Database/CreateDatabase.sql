@@ -155,7 +155,10 @@ Insert Into [Authentication] values ('Jan_Kowalski@gmail.com','abcdef','Manager'
 ('Igor_Czarnecki@mail.com','17wu89','Client'),
 ('Oliwia_Dąbrowska@mail.com','qwe123','Client'),
 ('Dominika_Wróblewska@mail.com','1345qwe','Client'),
-('Gabriela_Chrzanowska@mail.com','1345qwe','Client')
+('Gabriela_Chrzanowska@mail.com','1345qwe','Client'),
+('Sebastian_Nowak@gmail.com','abcdef','Worker'),
+('Justyna_mis@mail.com','123456*','Worker'),
+('nowy@mail.com','8is&kKK','Worker')
 
 
 insert into [CateringFirms] values
@@ -169,13 +172,20 @@ insert Into [Managers] values
 insert into [Workers] values
 ('Maksymilian','Kozioł',8,1),
 ('Wiktor','Lewandowski',9,2),
-('Emilia','Kowalska',10,1)
+('Emilia','Kowalska',10,1),
+('Sebastian','Nowak',15,1),
+('Justyna','Miśkiewicz',16,1),
+('Anna','Sęk',17,1)
 
 insert into [ClientFirms] values
 ('Hummingbird Corp','Traktorowa 17','logo', 'Lódź'),
 ('Micro Industries','Gdańska 12','logo', 'Lódź'),
 ('Prime Solutions','Łąkowa 22','logo', 'Lódź'),
-('Butterflyght','Dostawcza 12','logo', 'Lódź')
+('Butterflyght','Dostawcza 12','logo', 'Lódź'),
+('Fujitsu','Fabryczna 17 ','logo', 'Lódź'),
+('Barry Callebaut','Wolczanska 180','logo', 'Lódź'),
+('TME','Ustronna 41','logo', 'Lódź'),
+('Coats','Kaczeńcowa 16','logo', 'Lódź')
 
 
 insert into [Clients] values
@@ -190,7 +200,7 @@ insert into [Clients] values
 ('Gabriela','Chrzanowska',4,14)
 
 insert into [CateringFirmClientFirm] values
-(1,1),(1,3),(1,4),(2,1),(2,2)
+(1,1),(1,3),(1,4),(2,1),(2,2),(1,5),(1,6),(1,7),(1,8)
 
 insert into [Foods] values
 (1,4.00,'Kanapka z serem i szynką','Chleb razowy, masło, sałata, ser, szynka','img',0),
@@ -215,7 +225,12 @@ insert into [Tasks] values
 (1,0,'2018-10-27',2),
 (2,0,'2018-10-27',2),
 (3,0,'2018-10-27',1),
-(4,0,'2018-10-27',1)
+(4,0,'2018-10-27',1),
+(7,0,'2018-10-29',6),
+(6,0,'2018-10-30',5),
+(7,0,'2018-10-31',1),
+(6,0,'2018-10-27',1),
+(8,0,'2018-10-28',6)
 
 
 -- Przykładowa kwerenda wyświetlajaca wszystkie zamówienia na dzisiejszy dzień - sumuje zamówienia tej samej osoby na tą samą rzecz
