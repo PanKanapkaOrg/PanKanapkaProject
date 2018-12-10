@@ -1,4 +1,4 @@
-USE master
+﻿USE master
 GO
 IF EXISTS (
   SELECT name
@@ -29,7 +29,6 @@ create table [CateringFirms]
 	address varchar(255) not null,
 	info varchar(max) not null,
 	logoUrl varchar(max) not null,
-	DayOfWork tinyint not null,
 	Constraint PK_CateringFirms_ID Primary Key(ID)
 )
 
@@ -69,6 +68,7 @@ create table ClientFirms
 	address varchar(255) not null,
 	logoUrl varchar(max) not null,
 	City varchar(255) not null,
+	DayOfWork tinyint not null,
 	Constraint PK_ClientFirms_ID Primary Key(ID)
 )
 
@@ -143,24 +143,27 @@ Constraint FK_CateringFirmClientFirm_clientfirmID Foreign Key (clientfirmID) ref
 )
 
 Insert Into [Authentication] values ('Jan_Kowalski@gmail.com','abcdef','Manager'),
-('Adam_Nowak@mail.com','123456*','Manager'),
-('Marta_Wieczorek@mail.com','8is&kKK','Client'),
-('Paweł_Wiśniewski@mail.com','P[(jjKS','Client'),
-('Aleksandra_Pawlik@mail.com','a233DDqwe','Client'),
-('Jakub_Paluch@mail.com','qazSWX23','Client'),
-('Jakub_Nowak@mail.com','1345qwe','Client'),
-('Maksymilian_Kozioł@mail.com','work1234','Worker'),
-('Wiktor_Lewandowski@mail.com','xze1234','Worker'),
-('Emilia_Kowalska@mail.com','1345qwe','Worker'),
-('Igor_Czarnecki@mail.com','17wu89','Client'),
-('Oliwia_Dąbrowska@mail.com','qwe123','Client'),
-('Dominika_Wróblewska@mail.com','1345qwe','Client'),
-('Gabriela_Chrzanowska@mail.com','1345qwe','Client')
+('Adam_Nowak@mail.com','abcdef','Manager'),
+('Marta_Wieczorek@mail.com','abcdef','Client'),
+('Paweł_Wiśniewski@mail.com','abcdef','Client'),
+('Aleksandra_Pawlik@mail.com','abcdef','Client'),
+('Jakub_Paluch@mail.com','abcdef','Client'),
+('Jakub_Nowak@mail.com','abcdef','Client'),
+('Maksymilian_Kozioł@mail.com','abcdef','Worker'),
+('Wiktor_Lewandowski@mail.com','abcdef','Worker'),
+('Emilia_Kowalska@mail.com','abcdef','Worker'),
+('Igor_Czarnecki@mail.com','abcdef','Client'),
+('Oliwia_Dąbrowska@mail.com','abcdef','Client'),
+('Dominika_Wróblewska@mail.com','abcdef','Client'),
+('Gabriela_Chrzanowska@mail.com','abcdef','Client'),
+('Sebastian_Nowak@gmail.com','abcdef','Worker'),
+('Justyna_mis@mail.com','abcdef','Worker'),
+('nowy@mail.com','abcdef','Worker')
 
 
 insert into [CateringFirms] values
-('Bon-Appetit','Dostawcza 7','info','tutajbedzielogo',254),
-('Smakus','Sterlinga 22','info','tutajbedziekolejnelogo',252)
+('Bon-Appetit','Dostawcza 7','info','tutajbedzielogo'),
+('Smakus','Sterlinga 22','info','tutajbedziekolejnelogo')
 
 insert Into [Managers] values
 ('Jan','Kowalski','1','1'),
@@ -169,13 +172,20 @@ insert Into [Managers] values
 insert into [Workers] values
 ('Maksymilian','Kozioł',8,1),
 ('Wiktor','Lewandowski',9,2),
-('Emilia','Kowalska',10,1)
+('Emilia','Kowalska',10,1),
+('Sebastian','Nowak',15,1),
+('Justyna','Miśkiewicz',16,1),
+('Anna','Sęk',17,1)
 
 insert into [ClientFirms] values
-('Hummingbird Corp','Traktorowa 17','logo', 'Lódź'),
-('Micro Industries','Gdańska 12','logo', 'Lódź'),
-('Prime Solutions','Łąkowa 22','logo', 'Lódź'),
-('Butterflyght','Dostawcza 12','logo', 'Lódź')
+('Hummingbird Corp','Traktorowa 17','logo', 'Lódź',252),
+('Micro Industries','Gdańska 12','logo', 'Lódź',254),
+('Prime Solutions','Łąkowa 22','logo', 'Lódź',255),
+('Butterflyght','Dostawcza 12','logo', 'Lódź',192),
+('Fujitsu','Fabryczna 17 ','logo', 'Lódź',168),
+('Barry Callebaut','Wolczanska 180','logo', 'Lódź', 64),
+('TME','Ustronna 41','logo', 'Lódź', 32),
+('Coats','Kaczeńcowa 16','logo', 'Lódź',96)
 
 
 insert into [Clients] values
@@ -190,7 +200,7 @@ insert into [Clients] values
 ('Gabriela','Chrzanowska',4,14)
 
 insert into [CateringFirmClientFirm] values
-(1,1),(1,3),(1,4),(2,1),(2,2)
+(1,1),(1,3),(1,4),(2,1),(2,2),(1,5),(1,6),(1,7),(1,8)
 
 insert into [Foods] values
 (1,4.00,'Kanapka z serem i szynką','Chleb razowy, masło, sałata, ser, szynka','img',0),
@@ -215,7 +225,12 @@ insert into [Tasks] values
 (1,0,'2018-10-27',2),
 (2,0,'2018-10-27',2),
 (3,0,'2018-10-27',1),
-(4,0,'2018-10-27',1)
+(4,0,'2018-10-27',1),
+(7,0,'2018-10-29',6),
+(6,0,'2018-10-30',5),
+(7,0,'2018-10-31',1),
+(6,0,'2018-10-27',1),
+(8,0,'2018-10-28',6)
 
 
 -- Przykładowa kwerenda wyświetlajaca wszystkie zamówienia na dzisiejszy dzień - sumuje zamówienia tej samej osoby na tą samą rzecz
@@ -291,6 +306,3 @@ begin
 		where AuthID = @auth
 	end
 end
-
-
-
