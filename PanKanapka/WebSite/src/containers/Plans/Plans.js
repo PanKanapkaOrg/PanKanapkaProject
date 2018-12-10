@@ -3,7 +3,9 @@ import GetTasks from "../services/api/GetTasks";
 import GetClientFirms from "../services/api/GetClientFirms";
 import GetWorkers from "../services/api/GetWorkers";
 import CircularSpinnerLoading from "../CircularSpinnerLoading";
-import { Modal } from 'react-materialize';
+import Modal from 'react-modal';
+
+//Modal.setAppElement('#modal1')
 
 export default class Plans extends Component {
     constructor(props) {
@@ -56,6 +58,11 @@ export default class Plans extends Component {
                 <div className="Home">
                     <div className="lander">
                         <h1>Plany dla pracowników</h1><br></br>
+                        <Modal
+          isOpen={true}
+          contentLabel="Example Modal">
+          <h1>Modal</h1>
+        </Modal>
                         <table className="highlight centered">
                             <thead>
                                 <tr>
