@@ -3,6 +3,7 @@ import GetTasks from "../services/api/GetTasks";
 import GetClientFirms from "../services/api/GetClientFirms";
 import GetWorkers from "../services/api/GetWorkers";
 import CircularSpinnerLoading from "../CircularSpinnerLoading";
+import { Modal } from 'react-materialize';
 
 export default class Plans extends Component {
     constructor(props) {
@@ -26,8 +27,8 @@ export default class Plans extends Component {
                 var taskFilter = {
                     WorkerIds: workers.map(w => w.id),
                     Date: "2018-10-27",
-                    DaysBefore: 3,
-                    DaysAfter: 3
+                    DaysBefore: 0,
+                    DaysAfter: 6
                 }
 
                 GetTasks(taskFilter)
@@ -54,8 +55,8 @@ export default class Plans extends Component {
             return (
                 <div className="Home">
                     <div className="lander">
-                        <h1>Plany dla pracowników</h1>
-                        <table className="striped">
+                        <h1>Plany dla pracowników</h1><br></br>
+                        <table className="highlight centered">
                             <thead>
                                 <tr>
                                     <th>Pracownik</th>
@@ -95,7 +96,15 @@ export default class Plans extends Component {
 
                         </table>
 
-
+                                 <div id="modal1" className="modal">
+    <div className="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div className="modal-footer">
+      <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
 
                     </div>
                 </div>
