@@ -35,9 +35,11 @@ export default class Home extends Component {
            return (
             <div className="Home">
                 <div className="lander">
-                    <img src="/logo.png" alt="logo"></img>
+                    <img src={this.props.logoUrl} alt="logo"></img>
                     <h1>    {this.props.cateringFirmName}  </h1>
-                    <img src="/logo.png" alt="logo"></img>
+                    <img src={this.props.logoUrl} alt="logo"></img>
+                    <p>{this.props.cateringFirmAddress}</p>
+                    <p>{this.props.cateringFirmInfo}</p>
                     <div>
 
                         <table className="striped">
