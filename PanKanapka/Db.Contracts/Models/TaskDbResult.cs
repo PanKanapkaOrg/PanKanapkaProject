@@ -6,6 +6,7 @@ namespace Db.Contracts.Models
 {
     public class TaskDbResult
     {
+        public long TaskId { get; set; }
         public long WorkerId { get; set; }
         public string WorkerName { get; set; }
         public string WorkerSurname { get; set; }

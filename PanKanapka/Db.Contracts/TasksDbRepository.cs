@@ -68,7 +68,7 @@ namespace Db.Contracts
         public async Task<IEnumerable<Api.Domain.Models.WorkerTask>> GetTasks(TasksFilter tasksFilter)
         {
             string getTaskSqlQuery =
-                @"select w.ID as WorkerId, w.name as WorkerName, w.surname as WorkerSurname, t.taskDate as TaskDate, cf.logoUrl as LogoUrl, 
+                @"select t.ID as TaskId, w.ID as WorkerId, w.name as WorkerName, w.surname as WorkerSurname, t.taskDate as TaskDate, cf.logoUrl as LogoUrl, 
                 cf.name as ClientFirmName, cf.address as Address, t.isDone as IsDone 
                 from Tasks t 
                 join Workers w on w.ID = t.workerID 
@@ -104,6 +104,7 @@ namespace Db.Contracts
                                     {
                                         return new FirmTask()
                                         {
+                                            Id= dbTask3.TaskId,
                                             Address = dbTask3.Address,
                                             IsActiveTask = !dbTask3.IsDone,
                                             LogoUrl = dbTask3.LogoUrl,
@@ -128,7 +129,7 @@ namespace Db.Contracts
                             Firms = new List<FirmTask>(0)
                         }).ToList();
 
-                    workerTasks[i].TaskItems = workerTasks[i].TaskItems.Concat(daysThatNotExist);
+                    workerTasks[i].TaskItems = workerTasks[i].TaskItems.Concat(daysThatNotExist).OrderBy(ti => ti.Date);
                 }
 
                 return workerTasks;

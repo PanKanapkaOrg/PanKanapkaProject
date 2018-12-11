@@ -4,8 +4,8 @@ import GetClientFirms from "../services/api/GetClientFirms";
 import GetWorkers from "../services/api/GetWorkers";
 import CircularSpinnerLoading from "../CircularSpinnerLoading";
 import Modal from 'react-modal';
-
-//Modal.setAppElement('#modal1')
+import CreateTaskModal from "./CreateTaskModal"
+import "./plans.css";
 
 export default class Plans extends Component {
     constructor(props) {
@@ -15,7 +15,12 @@ export default class Plans extends Component {
             isLoading: true,
             ClientFirms: [],
             Workers: [],
-            Tasks: []
+            Tasks: [],
+
+            isModalDisplay: false,
+            choosenWorker: null,
+            choosenDate: null,
+            choosenFirms: null
         };
     }
 
@@ -29,8 +34,8 @@ export default class Plans extends Component {
                 var taskFilter = {
                     WorkerIds: workers.map(w => w.id),
                     Date: "2018-10-27",
-                    DaysBefore: 0,
-                    DaysAfter: 6
+                    DaysBefore: 3,
+                    DaysAfter: 3
                 }
 
                 GetTasks(taskFilter)
@@ -58,11 +63,7 @@ export default class Plans extends Component {
                 <div className="Home">
                     <div className="lander">
                         <h1>Plany dla pracowników</h1><br></br>
-                        <Modal
-          isOpen={true}
-          contentLabel="Example Modal">
-          <h1>Modal</h1>
-        </Modal>
+                        
                         <table className="highlight centered">
                             <thead>
                                 <tr>
@@ -88,11 +89,15 @@ export default class Plans extends Component {
                                                 task.taskItems.map((taskItem) =>
                                                     <td>
                                                         <ul>
-
                                                             {taskItem.firms.map((firm) =>
                                                                 <li>{firm.name}</li>
                                                             )}
                                                         </ul>
+                                                        <button 
+                                                                        className="btn waves-effect #1a237e indigo darken-4 add-plan"  
+                                                                        onClick={() => {
+                                                                            this.setState({ isModalDisplay : true, choosenWorker : task.worker, choosenDate:taskItem.date, choosenFirms:this.state.ClientFirms })
+                                                                        }}><i className="material-icons center">add</i></button>
                                                     </td>
                                                 )
                                             }
@@ -103,15 +108,20 @@ export default class Plans extends Component {
 
                         </table>
 
-                                 <div id="modal1" className="modal">
-    <div className="modal-content">
-      <h4>Modal Header</h4>
-      <p>A bunch of text</p>
-    </div>
-    <div className="modal-footer">
-      <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-  </div>
+                        <div id="modal1" className="modal">
+                            <div className="modal-content">
+                                <h4>Modal Header</h4>
+                                <p>A bunch of text</p>
+                            </div>
+                            <div className="modal-footer">
+                                <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
+                            </div>
+                        </div>
+                        <Modal
+                            isOpen={this.state.isModalDisplay}
+                            contentLabel="Example Modal">
+                            <CreateTaskModal worker={this.state.choosenWorker} date={this.state.choosenDate} clientFirms={this.state.choosenFirms} onClose={() => this.setState(() => this.state.isModalDisplay = false)} />
+                        </Modal>
 
                     </div>
                 </div>
