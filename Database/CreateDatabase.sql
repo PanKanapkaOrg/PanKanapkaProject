@@ -288,14 +288,14 @@ where mail=@mail and pass=@password;
 begin
 	if @role = 'Manager'  
 	begin
-	select @auth as AuthId, ID as Id, @role as Role, m.name as Name, m.surname as Surname, CateringFirmID as FirmId, c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, null as DayOfWork
+	select @auth as AuthId, m.ID as Id, @role as Role, m.name as Name, m.surname as Surname, CateringFirmID as FirmId, c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, null as DayOfWork
 	from Managers m
 	join CateringFirms c on m.CateringFirmID=c.ID 
 
 	end
 	else if @role = 'Worker'
 	begin
-		select @auth as AuthID, ID as Id, @role as Role, w.name as Name, surname as Surname, CateringFirmID as FirmId,
+		select @auth as AuthID, w.ID as Id, @role as Role, w.name as Name, surname as Surname, CateringFirmID as FirmId,
 		c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, null as DayOfWork
 		from Workers w
 		join CateringFirms c on w.CateringFirmID=c.ID 
@@ -303,7 +303,7 @@ begin
 	end
 	else if @role ='Client'
 	begin
-		select @auth as AuthId, ID as Id, @role as Role, cl.name as Name, surname as Surname, ClientFirmID as FirmId,
+		select @auth as AuthId, c.ID as Id, @role as Role, cl.name as Name, surname as Surname, ClientFirmID as FirmId,
 		c.name as FirmName, c.address as Address, null as Info, c.logoUrl as LogoUrl, c.DayOfWork as DayOfWork
 		from Clients cl
 		join ClientFirms c on cl.clientFirmID=c.ID 
