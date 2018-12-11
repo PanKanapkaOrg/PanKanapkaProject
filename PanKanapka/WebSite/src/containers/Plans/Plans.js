@@ -24,8 +24,8 @@ export default class Plans extends Component {
         };
     }
 
-
-    componentDidMount() {
+    loadTasks = () => {
+        this.setState({isLoading: true});
 
         GetClientFirms(this.props)
             .then(firms => this.setState({ ClientFirms: firms }));
@@ -43,10 +43,15 @@ export default class Plans extends Component {
                         window.setTimeout(() => this.setState({ Tasks: tasks.data, Workers: workers, isLoading: false }), 1500);
                     });
             });
+    }
 
+    componentDidMount() {
+        this.loadTasks();
+    }
 
-
-
+    closeModal = () => {
+        this.setState(() => this.state.isModalDisplay = false);
+        this.loadTasks();
     }
 
     render() {
@@ -87,7 +92,7 @@ export default class Plans extends Component {
                                             </td>
                                             {
                                                 task.taskItems.map((taskItem) =>
-                                                    <td>
+                                                    <td className="komorka">
                                                         <ul>
                                                             {taskItem.firms.map((firm) =>
                                                                 <li>{firm.name}</li>
@@ -120,7 +125,11 @@ export default class Plans extends Component {
                         <Modal
                             isOpen={this.state.isModalDisplay}
                             contentLabel="Example Modal">
-                            <CreateTaskModal worker={this.state.choosenWorker} date={this.state.choosenDate} clientFirms={this.state.choosenFirms} onClose={() => this.setState(() => this.state.isModalDisplay = false)} />
+                            <CreateTaskModal 
+                                worker={this.state.choosenWorker} 
+                                date={this.state.choosenDate} 
+                                clientFirms={this.state.choosenFirms} 
+                                onClose={() => this.closeModal()} />
                         </Modal>
 
                     </div>
