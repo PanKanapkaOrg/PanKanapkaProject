@@ -6,7 +6,7 @@ AppState appReducer(AppState state, action) {
   return AppState(
     activeTab: tabsReducer(state.activeTab, action),
     choosenDay: updateChoosenDayReducer(state.choosenDay, action),
-    loggedInWorker: state.loggedInWorker,
+    loggedInWorker: loggedInWorkerReducer(state.loggedInWorker, action),
     isLoading: loadingReducer(state.isLoading, action),
     workerTasks: workerTasksReducer(state.workerTasks, action)
     );
@@ -32,3 +32,5 @@ final loadingReducer = combineReducers<bool>(
 );
 
 final tabsReducer = TypedReducer<AppTab, UpdateTabAction>((activeTab, action) => action.newTab);
+
+final loggedInWorkerReducer = TypedReducer<Worker, WorkerLoggedInAction>((activeTab, action) => action.worker);

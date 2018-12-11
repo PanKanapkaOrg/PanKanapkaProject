@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pankan_appka/actions/actions.dart';
+import 'package:pankan_appka/containers/logged_in_app.dart';
 import 'package:pankan_appka/models/models.dart';
 import 'package:pankan_appka/presentation/home_screen.dart';
+import 'package:pankan_appka/presentation/login_screen.dart';
 import 'package:redux/redux.dart';
 import 'package:pankan_appka/reducers/reducers.dart';
 import 'package:pankan_appka/middleware/worker_tasks_middleware.dart';
@@ -10,12 +12,13 @@ import 'package:pankan_appka/middleware/worker_tasks_middleware.dart';
 void main() {
   final store = new Store<AppState>(
       appReducer,
-      initialState: AppState.loading().copyWith(worker: Worker(
-        id: 2,
-        name: "Yevhenii",
-        surname: "Kyshko",
-        cateringFirmId: 2
-      )),
+      initialState: AppState.loading(),
+      // .copyWith(worker: Worker(
+      //   id: 2,
+      //   name: "Yevhenii",
+      //   surname: "Kyshko",
+      //   cateringFirmId: 2
+      // )),
       middleware: createWorkerTasksMiddleware());
   runApp(
     StoreProvider<AppState>(
@@ -33,13 +36,16 @@ class PanKanapkaApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.purple,
           ),
-          home: HomeScreen(
+          home: LoggedInApp(builder: (context, isLoggedIn) => 
+           isLoggedIn ?  HomeScreen(
             onInit: () {
               StoreProvider.of<AppState>(context).dispatch(
                 ChangeDayAction(choosenDay: DateTime.parse("2018-10-27"))
               );
             },
-          ),
+          )
+          :
+          LoginScreen())
         );
   }
 }

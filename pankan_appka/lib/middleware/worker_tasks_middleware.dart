@@ -30,7 +30,7 @@ Middleware<AppState> _loadWorkerTasksMiddleware(ITasksRepository tasksRepostory,
 
     if (action is LoadWorkerTasksAction) {
       ApiModels.TaskFilter tasksFilter = ApiModels.TaskFilter(
-          workerIds: [store.state.loggedInWorker?.id ?? 2], date: action.date);
+          workerIds: [store.state.loggedInWorker.id], date: action.date);
 
       var tasks = await tasksRepostory.getWorkerTasks(tasksFilter);
 

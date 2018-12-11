@@ -274,23 +274,20 @@ begin
 	
 	if @role = 'Manager'  
 	begin
-		select @auth as AuthId, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
+		select @auth as AuthId, ID as Id, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
 		from Managers
 		where AuthID = @auth
 	end
 	else if @role = 'Worker'
 	begin
-		select @auth as AuthID, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
+		select @auth as AuthID, ID as Id, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
 		from Workers
 		where AuthID = @auth
 	end
 	else if @role ='Client'
 	begin
-		select @auth as AuthId, @role as Role, name as Name, surname as Surname, ClientFirmID as FirmId 
+		select @auth as AuthId, ID as Id, @role as Role, name as Name, surname as Surname, ClientFirmID as FirmId 
 		from Clients
 		where AuthID = @auth
 	end
 end
-
-
-

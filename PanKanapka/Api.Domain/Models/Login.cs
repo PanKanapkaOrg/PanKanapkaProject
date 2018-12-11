@@ -6,6 +6,7 @@ namespace Api.Domain.Models
 {
     public class Login
     {
+        public long Id { get; set; }
         public long AuthId { get; set; }
         public long FirmId { get; set; }
         public string Name { get; set; }

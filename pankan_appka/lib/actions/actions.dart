@@ -30,3 +30,9 @@ class ChangeDayAction {
 
   ChangeDayAction({this.choosenDay});
 }
+
+class WorkerLoggedInAction {
+  Worker worker;
+
+  WorkerLoggedInAction(this.worker);
+}

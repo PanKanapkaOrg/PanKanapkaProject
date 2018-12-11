@@ -17,7 +17,7 @@ namespace Api.Web.Controllers
             _loginRepository = loginRepository;
         }
 
-        [HttpPost("/api/[controller]")]
+        [HttpGet("/api/[controller]")]
         public async Task<Login> GetLoginData([FromQuery]string mail, [FromQuery]string password)
         {
             Login loginData = await _loginRepository.GetLoginData(mail, password);
