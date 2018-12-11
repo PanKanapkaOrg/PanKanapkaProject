@@ -17,4 +17,20 @@ namespace Api.Domain.Models
         public double PriceTotal { get; set; }
         public string ItemImageUrl { get; set; }
     }
+
+
+    public class ClientReservation
+    {
+        public long ReservationId { get; set; }
+        public CateringFirm cateringFirm { get; set; }
+        public bool IsActiveReservation { get; set; }
+        public string Name { get; set; }
+        public int Quantity { get; set; }
+        public double PriceTotal { get; set; }
+        public string ItemImageUrl { get; set; }
+    }
+
+    public class CateringFirm
+    {
+    }
 }

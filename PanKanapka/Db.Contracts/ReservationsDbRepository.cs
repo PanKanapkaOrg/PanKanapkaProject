@@ -75,7 +75,8 @@ namespace Db.Contracts
                                         {
                                             ItemImageUrl = reservationItemResult.ItemImageUrl,
                                             Name = reservationItemResult.FoodName,
-                                            PriceTotal = reservationItemResult.PriceTotal
+                                            PriceTotal = reservationItemResult.PriceTotal,
+                                            Quantity = reservationItemResult.Quantity
                                         })
                                 }
                 );
