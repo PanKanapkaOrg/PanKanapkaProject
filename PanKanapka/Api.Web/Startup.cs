@@ -32,7 +32,7 @@ namespace Api.Web
             services.AddCors((options) => options.AddPolicy("AllowAllOrigins",
                 builder =>
                 {
-                    builder.AllowAnyOrigin().AllowAnyHeader();
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 }));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IDbConnection>(p=>new SqlConnection(@"Integrated Security = SSPI; Persist Security Info = False; Initial Catalog = PanKanapka; Data Source =.\SQLEXPRESS;"));

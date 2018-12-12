@@ -129,7 +129,7 @@ namespace Db.Contracts
                             Firms = new List<FirmTask>(0)
                         }).ToList();
 
-                    workerTasks[i].TaskItems = workerTasks[i].TaskItems.Concat(daysThatNotExist);
+                    workerTasks[i].TaskItems = workerTasks[i].TaskItems.Concat(daysThatNotExist).OrderBy(ti => ti.Date);
                 }
 
                 return workerTasks;

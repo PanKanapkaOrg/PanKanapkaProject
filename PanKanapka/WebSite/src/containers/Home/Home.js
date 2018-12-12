@@ -6,7 +6,7 @@ export default class Home extends Component {
         return (
             <div className="Home">
                 <div className="lander">
-                    <h1>Witaj w serwisie Pan Kanapka</h1>
+                    <h1>Witaj w serwisie kateringowym</h1>
                     <p>Zaloguj się aby przejść do panelu managera</p>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-USE master
+﻿USE master
 GO
 IF EXISTS (
   SELECT name
@@ -155,7 +155,10 @@ Insert Into [Authentication] values ('Jan_Kowalski@gmail.com','abcdef','Manager'
 ('Igor_Czarnecki@mail.com','17wu89','Client'),
 ('Oliwia_Dąbrowska@mail.com','qwe123','Client'),
 ('Dominika_Wróblewska@mail.com','1345qwe','Client'),
-('Gabriela_Chrzanowska@mail.com','1345qwe','Client')
+('Gabriela_Chrzanowska@mail.com','1345qwe','Client'),
+('Sebastian_Nowak@gmail.com','abcdef','Worker'),
+('Justyna_mis@mail.com','123456*','Worker'),
+('nowy@mail.com','8is&kKK','Worker')
 
 
 insert into [CateringFirms] values
@@ -169,13 +172,20 @@ insert Into [Managers] values
 insert into [Workers] values
 ('Maksymilian','Kozioł',8,1),
 ('Wiktor','Lewandowski',9,2),
-('Emilia','Kowalska',10,1)
+('Emilia','Kowalska',10,1),
+('Sebastian','Nowak',15,1),
+('Justyna','Miśkiewicz',16,1),
+('Anna','Sęk',17,1)
 
 insert into [ClientFirms] values
-('Hummingbird Corp','Traktorowa 17','https://media.licdn.com/dms/image/C560BAQEFce4b65Jt3w/company-logo_200_200/0?e=2159024400&v=beta&t=KxSQhD54dT3H2YwCHyzqWmY0-GFaxnXvyB79IC22bpM', 'Lódź'),
-('Micro Industries','Gdańska 12','https://media.glassdoor.com/sqll/106487/micro-industries-squarelogo-1461240302453.png', 'Lódź'),
+('Hummingbird Corp','Traktorowa 17','logo', 'Lódź'),
+('Micro Industries','Gdańska 12','logo', 'Lódź'),
 ('Prime Solutions','Łąkowa 22','logo', 'Lódź'),
-('Butterflyght','Dostawcza 12','logo', 'Lódź')
+('Butterflyght','Dostawcza 12','logo', 'Lódź'),
+('Fujitsu','Fabryczna 17 ','logo', 'Lódź'),
+('Barry Callebaut','Wolczanska 180','logo', 'Lódź'),
+('TME','Ustronna 41','logo', 'Lódź'),
+('Coats','Kaczeńcowa 16','logo', 'Lódź')
 
 
 insert into [Clients] values
@@ -190,14 +200,14 @@ insert into [Clients] values
 ('Gabriela','Chrzanowska',4,14)
 
 insert into [CateringFirmClientFirm] values
-(1,1),(1,3),(1,4),(2,1),(2,2)
+(1,1),(1,3),(1,4),(2,1),(2,2),(1,5),(1,6),(1,7),(1,8)
 
 insert into [Foods] values
-(1,4.00,'Kanapka z serem i szynką','Chleb razowy, masło, sałata, ser, szynka','http://www.cateringservice.com.pl/cache/50/pr/png/460_x/15317288201531728820.png',0),
-(1,5.00,'Kanapka z kurczakiem','Chleb razowy, masło, sałata, pomidor, kurczak','http://www.cateringservice.com.pl/cache/50/pr/png/460_x/15274889771527488977.png',0),
-(1,7.50,'Kanapka z tuńczykiem','Chleb żytni, margaryna, tuńczyk, jajko, majonez, natka pietruszki','http://www.cateringservice.com.pl/cache/50/pr/png/460_x/14495777241449577724.png',0),
-(2,8.00,'Kanapka z tofu','Chleb razowy, masło, tofu, pomidor, papryka, rukola','http://www.cateringservice.com.pl/cache/50/pr/png/460_x/14531960421453196042.png',1),
-(2,3.00,'Kanapka z serem','Chleb pszenny, masło, sałata, pomidor, ser','http://www.cateringservice.com.pl/cache/50/pr/png/460_x/15317287481531728748.png',1)
+(1,4.00,'Kanapka z serem i szynką','Chleb razowy, masło, sałata, ser, szynka','img',0),
+(1,5.00,'Kanapka z kurczakiem','Chleb razowy, masło, sałata, pomidor, kurczak','img',0),
+(1,7.50,'Kanapka z tuńczykiem','Chleb żytni, margaryna, tuńczyk, jajko, majonez, natka pietruszki','img',0),
+(2,8.00,'Kanapka z tofu','Chleb razowy, masło, tofu, pomidor, papryka, rukola','img',1),
+(2,3.00,'Kanapka z serem','Chleb pszenny, masło, sałata, pomidor, ser','img',1)
 
 insert into [Reservation] values
 ('2018-11-01',1,2,3,1),
@@ -215,7 +225,12 @@ insert into [Tasks] values
 (1,0,'2018-10-27',2),
 (2,0,'2018-10-27',2),
 (3,0,'2018-10-27',1),
-(4,0,'2018-10-27',1)
+(4,0,'2018-10-27',1),
+(7,0,'2018-10-29',6),
+(6,0,'2018-10-30',5),
+(7,0,'2018-10-31',1),
+(6,0,'2018-10-27',1),
+(8,0,'2018-10-28',6)
 
 
 -- Przykładowa kwerenda wyświetlajaca wszystkie zamówienia na dzisiejszy dzień - sumuje zamówienia tej samej osoby na tą samą rzecz
@@ -265,29 +280,31 @@ where w.ID in (1,2,3) and t.taskDate between CONVERT(DATETIME, '2018-10-27', 102
 create or alter procedure LoginProcedure @mail varchar(50), @password varchar(50)
 as
 begin
-	declare @role varchar(20);
-	declare @auth bigint;
-
-	select @role = role, @auth = ID
-	from Authentication 
-	where mail=@mail and pass=@password;
-	
 	if @role = 'Manager'  
 	begin
-		select @auth as AuthId, ID as Id, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
-		from Managers
+		select @auth as AuthId, @role as Role, m.name as Name, m.surname as Surname, CateringFirmID as FirmId,
+		c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, c.DayOfWork as DayOfWork
+		from Managers m
+		join CateringFirms c on m.CateringFirmID=c.ID 
 		where AuthID = @auth
 	end
 	else if @role = 'Worker'
 	begin
-		select @auth as AuthID, ID as Id, @role as Role, name as Name, surname as Surname, CateringFirmID as FirmId 
-		from Workers
+		select @auth as AuthID, @role as Role, w.name as Name, surname as Surname, CateringFirmID as FirmId,
+		c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, c.DayOfWork as DayOfWork
+		from Workers w
+		join CateringFirms c on w.CateringFirmID=c.ID 
 		where AuthID = @auth
 	end
 	else if @role ='Client'
 	begin
-		select @auth as AuthId, ID as Id, @role as Role, name as Name, surname as Surname, ClientFirmID as FirmId 
-		from Clients
+		select @auth as AuthId, @role as Role, cl.name as Name, surname as Surname, ClientFirmID as FirmId,
+		c.name as FirmName, c.address as Address, null as Info, c.logoUrl as LogoUrl, null as DayOfWork
+		from Clients cl
+		join ClientFirms c on cl.clientFirmID=c.ID 
 		where AuthID = @auth
 	end
 end
+
+
+

@@ -18,6 +18,7 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
+        document.title = "Firma - Serwis kateringowy"; //tytul dla przegladarki
         GetClientFirms(this.props)
                 .then(firms => this.setState({ClientFirms:firms}));
         GetWorkers(this.props)
@@ -29,7 +30,7 @@ export default class Home extends Component {
     render() {
         if(this.state.isLoading)
         {
-            return <div className="lander"><CircularSpinnerLoading /> </div>
+            return <div className="Home"><div className="lander"><CircularSpinnerLoading /> </div></div>
         }
         else {
            return (
@@ -69,6 +70,7 @@ export default class Home extends Component {
                             <thead>
                                 <tr><th><h5>Twoi pracownicy</h5></th></tr>
                                 <tr>
+                                    <th>Lp.</th>
                                     <th>Imie</th>
                                     <th>Nazwisko</th>
                                 </tr>
@@ -77,6 +79,7 @@ export default class Home extends Component {
                                 {
                                     this.state.Workers.map((Workers, i) =>
                                         <tr>
+                                            <td><p key={i}>{i+1}</p></td>
                                             <td>
                                                 <p key={Workers.id}>{Workers.name}</p>
                                             </td>
