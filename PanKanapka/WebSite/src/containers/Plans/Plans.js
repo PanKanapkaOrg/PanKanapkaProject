@@ -76,17 +76,18 @@ export default class Plans extends Component {
             return <CircularSpinnerLoading />
         }
         else {
-            // console.log("Tasks is = ", Array.isArray(this.state.Tasks));
-            // if (Array.isArray(this.state.Tasks)) {
-            //     console.log(this.state.ClientFirms);
-            //     console.log(this.state.Tasks);
-            // }
+            console.log("Tasks is = ", Array.isArray(this.state.Tasks));
+            if (Array.isArray(this.state.Tasks)) {
+                console.log(this.state.ClientFirms);
+                console.log(this.state.Tasks);
+            }
 
             this.state.UnusedFirms.clear();
 
             this.state.Tasks[0].taskItems.forEach((item) => {
                 this.state.UnusedFirms.set(item.date, this.state.ClientFirms);
             });
+            console.log("Unused firms = ",this.state.UnusedFirms);
             return (
                 <div className="Home">
                     <div className="lander">
@@ -149,6 +150,25 @@ export default class Plans extends Component {
                                             }
                                         </tr>
                                     )
+                                    // (
+                                    // <tr>
+
+                                    //         <td>
+                                    //             <h3> Nieuzyte firmy </h3>
+                                    //         </td>
+                                    //         {
+                                    //             Array.from(this.state.UnusedFirms, ([key, value]) => 
+                                    //                 <td className="komorka">
+                                    //                     <ul>
+                                    //                         {
+                                    //                         value.map((firm) => <li>{firm.name}</li>)
+                                    //                         }
+                                    //                     </ul>
+                                    //                 </td>
+                                    //             )
+                                    //         }
+                                    //     </tr>
+                                    // )
                                 }
                             </tbody>
                         </table>
