@@ -14,6 +14,7 @@ namespace Db.Contracts.Models
         public string LogoUrl { get; set; }
         public string ClientFirmName { get; set; }
         public string Address { get; set; }
-        public bool IsDone { get; set; }                
+        public bool IsDone { get; set; }
+        public long TaskId { get; set; }
     }
 }

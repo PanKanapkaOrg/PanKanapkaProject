@@ -53,11 +53,11 @@ export default class Plans extends Component {
     }
 
     deleteTask = (id) => {
-        // axios.post('http://localhost:5000/api/Tasks/create', [id]).then(repsonse => {
-        //     if (repsonse.status == 200) {
-        //         this.loadTasks();
-        //     }
-        // });
+        axios.post('http://localhost:5000/api/Tasks/delete', [id]).then(repsonse => {
+            if (repsonse.status == 200) {
+                this.loadTasks();
+            }
+        });
         this.loadTasks();
     }
 
@@ -87,7 +87,7 @@ export default class Plans extends Component {
             this.state.Tasks[0].taskItems.forEach((item) => {
                 this.state.UnusedFirms.set(item.date, this.state.ClientFirms);
             });
-            console.log("Unused firms = ",this.state.UnusedFirms);
+            console.log("Unused firms = ", this.state.UnusedFirms);
             return (
                 <div className="Home">
                     <div className="lander">
@@ -129,7 +129,7 @@ export default class Plans extends Component {
                                                             {taskItem.firms.map((firm) => {
                                                                 return (<li>
                                                                     <button className="usun" onClick={() => {
-                                                                        this.deleteTask(firm.id)
+                                                                        this.deleteTask(firm.taskId)
                                                                     }}>
                                                                         <span className="nazwa_firmy">{firm.name}</span>
                                                                         <i className="material-icons right">clear</i>
@@ -150,26 +150,26 @@ export default class Plans extends Component {
                                             }
                                         </tr>
                                     )
-                                    // (
-                                    // <tr>
-
-                                    //         <td>
-                                    //             <h3> Nieuzyte firmy </h3>
-                                    //         </td>
-                                    //         {
-                                    //             Array.from(this.state.UnusedFirms, ([key, value]) => 
-                                    //                 <td className="komorka">
-                                    //                     <ul>
-                                    //                         {
-                                    //                         value.map((firm) => <li>{firm.name}</li>)
-                                    //                         }
-                                    //                     </ul>
-                                    //                 </td>
-                                    //             )
-                                    //         }
-                                    //     </tr>
-                                    // )
                                 }
+
+                                <tr>
+
+                                    <td>
+                                        <b>Nieuzyte firmy</b>
+                                    </td>
+                                    {
+                                        Array.from(this.state.UnusedFirms, ([key, value]) =>
+                                            <td className="komorka">
+                                                <ul>
+                                                    {
+                                                        value.map((firm) => <li>{firm.name}</li>)
+                                                    }
+                                                </ul>
+                                            </td>
+                                        )
+                                    }
+                                </tr>
+
                             </tbody>
                         </table>
 
