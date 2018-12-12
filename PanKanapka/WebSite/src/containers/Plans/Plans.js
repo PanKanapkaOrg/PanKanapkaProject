@@ -21,7 +21,8 @@ export default class Plans extends Component {
             isModalDisplay: false,
             choosenWorker: null,
             choosenDate: null,
-            choosenFirms: null
+            choosenFirms: null,
+            display:null
         };
     }
 
@@ -117,8 +118,9 @@ export default class Plans extends Component {
                                                         </ul>
                                                         <button
                                                             className="btn waves-effect #1a237e indigo darken-4 add-plan"
+                                                            style={{display:this.state.display}}
                                                             onClick={() => {
-                                                                this.setState({ isModalDisplay: true, choosenWorker: task.worker, choosenDate: taskItem.date, choosenFirms: this.state.UnusedFirms.get(taskItem.date) })
+                                                                this.setState({ display:'none', isModalDisplay: true, choosenWorker: task.worker, choosenDate: taskItem.date, choosenFirms: this.state.UnusedFirms.get(taskItem.date) })
                                                             }}><i className="material-icons center">add</i></button>
                                                     </td>)
                                                 }
