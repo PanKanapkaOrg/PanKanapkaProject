@@ -16,6 +16,7 @@ export default class Plans extends Component {
             ClientFirms: [],
             Workers: [],
             Tasks: [],
+            UnusedFirms: new Map(),
 
             isModalDisplay: false,
             choosenWorker: null,
@@ -24,8 +25,8 @@ export default class Plans extends Component {
         };
     }
 
-
-    componentDidMount() {
+    loadTasks = () => {
+        this.setState({ isLoading: true });
 
         GetClientFirms(this.props)
             .then(firms => this.setState({ ClientFirms: firms }));
@@ -43,10 +44,15 @@ export default class Plans extends Component {
                         window.setTimeout(() => this.setState({ Tasks: tasks.data, Workers: workers, isLoading: false }), 1500);
                     });
             });
+    }
 
+    componentDidMount() {
+        this.loadTasks();
+    }
 
-
-
+    closeModal = () => {
+        this.setState(() => this.state.isModalDisplay = false);
+        this.loadTasks();
     }
 
     render() {
@@ -59,11 +65,18 @@ export default class Plans extends Component {
                 console.log(this.state.ClientFirms);
                 console.log(this.state.Tasks);
             }
+
+            this.state.UnusedFirms.clear();
+
+            this.state.Tasks[0].taskItems.forEach((item) => {
+                this.state.UnusedFirms.set(item.date, this.state.ClientFirms);
+            });
+            console.log("Unused firms = ",this.state.UnusedFirms);
             return (
                 <div className="Home">
                     <div className="lander">
                         <h1>Plany dla pracowników</h1><br></br>
-                        
+
                         <table className="highlight centered">
                             <thead>
                                 <tr>
@@ -86,23 +99,52 @@ export default class Plans extends Component {
                                                 {task.worker.name} {task.worker.surname}
                                             </td>
                                             {
-                                                task.taskItems.map((taskItem) =>
-                                                    <td>
+                                                task.taskItems.map((taskItem) => {
+                                                    var newArray = this.state.UnusedFirms.get(taskItem.date).filter(item => {
+                                                        //console.log("item id = ", item.id);
+                                                        return -1 === taskItem.firms.findIndex(firm => firm.id == item.id);
+                                                    });
+                                                    this.state.UnusedFirms.set(taskItem.date, newArray);
+                                                    console.log("Unsused firms = ", taskItem.date, newArray, task.worker.name);
+
+                                                
+                                                    return (<td className="komorka">
                                                         <ul>
-                                                            {taskItem.firms.map((firm) =>
-                                                                <li>{firm.name}</li>
+                                                            {taskItem.firms.map((firm) => {
+                                                                return (<li>{firm.name}</li>)
+                                                            }
                                                             )}
                                                         </ul>
-                                                        <button 
-                                                                        className="btn waves-effect #1a237e indigo darken-4 add-plan"  
-                                                                        onClick={() => {
-                                                                            this.setState({ isModalDisplay : true, choosenWorker : task.worker, choosenDate:taskItem.date, choosenFirms:this.state.ClientFirms })
-                                                                        }}><i className="material-icons center">add</i></button>
-                                                    </td>
+                                                        <button
+                                                            className="btn waves-effect #1a237e indigo darken-4 add-plan"
+                                                            onClick={() => {
+                                                                this.setState({ isModalDisplay: true, choosenWorker: task.worker, choosenDate: taskItem.date, choosenFirms: this.state.UnusedFirms.get(taskItem.date) })
+                                                            }}><i className="material-icons center">add</i></button>
+                                                    </td>)
+                                                }
                                                 )
                                             }
                                         </tr>
                                     )
+                                    // (
+                                    // <tr>
+
+                                    //         <td>
+                                    //             <h3> Nieuzyte firmy </h3>
+                                    //         </td>
+                                    //         {
+                                    //             Array.from(this.state.UnusedFirms, ([key, value]) => 
+                                    //                 <td className="komorka">
+                                    //                     <ul>
+                                    //                         {
+                                    //                         value.map((firm) => <li>{firm.name}</li>)
+                                    //                         }
+                                    //                     </ul>
+                                    //                 </td>
+                                    //             )
+                                    //         }
+                                    //     </tr>
+                                    // )
                                 }
                             </tbody>
 
@@ -120,9 +162,12 @@ export default class Plans extends Component {
                         <Modal
                             isOpen={this.state.isModalDisplay}
                             contentLabel="Example Modal">
-                            <CreateTaskModal worker={this.state.choosenWorker} date={this.state.choosenDate} clientFirms={this.state.choosenFirms} onClose={() => this.setState(() => this.state.isModalDisplay = false)} />
+                            <CreateTaskModal
+                                worker={this.state.choosenWorker}
+                                date={this.state.choosenDate}
+                                clientFirms={this.state.choosenFirms}
+                                onClose={() => this.closeModal()} />
                         </Modal>
-
                     </div>
                 </div>
             );

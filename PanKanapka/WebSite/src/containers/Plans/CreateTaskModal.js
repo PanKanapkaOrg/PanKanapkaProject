@@ -32,20 +32,20 @@ export default class CreateTaskModal extends Component {
 
     handleSubmit = event => {
         var postData = {
-            date : this.state.Date,
+            date: this.state.Date,
             workerId: this.state.Worker.id,
             clientFirmIds: Array.from(this.state.SelectedFirms)
         };
         console.log(postData);
 
-        axios.post('http://localhost:5000/api/Tasks/create', [ postData ]).then(repsonse => {
-            console.log(repsonse);    
-        if(repsonse.status == 200) {
+        axios.post('http://localhost:5000/api/Tasks/create', [postData]).then(repsonse => {
+            console.log(repsonse);
+            if (repsonse.status == 200) {
                 this.props.onClose();
             }
         });
     };
-    
+
 
     render() {
         if (this.state.isLoading) {
@@ -56,38 +56,59 @@ export default class CreateTaskModal extends Component {
             console.log(this.state.SelectedFirms);
 
             return (
-                <div>
+                <div className="Home">
+                    <div className="lander">
+                        <div className="row">
+                            <div className="col s12">
+                                <h1>Tworzenie nowego zdania dla pracownika</h1>
+                            </div>
+                            <div className="col s6 lewy">
+                                <h4><b>Pracownik:</b></h4>
+                            </div>
+                            <div className="col s6 prawy">
+                                <h4>{this.state.Worker.name}</h4>
+                            </div>
+                            <div className="col s6 lewy">
+                                <h4><b>Data:</b></h4>
+                            </div>
+                            <div className="col s6 prawy">
+                                <h4>{this.state.Date.substring(0, 10)}</h4>
+                            </div>
+                            <div className="col s12">
+                                <h4><b>Firmy</b></h4>
+                            </div>
+                            {
+                                this.state.ClientFirms.map((f) =>
+                                    <div className="col s4 firma">
+                                        <label>
+                                            <input type="checkbox" id={f.id} onChange={this.toggleCheckbox} />
+                                            <span><h5 className="firmName">{f.name}</h5></span>
+                                        </label>
+                                    </div>
+                                )
+                            }
+                            <div className="col s2 offset-s5">
+                                <button
+                                    className="btn waves-effect #1a237e indigo darken-4 zapisz"
+                                    type="submit"
+                                    onClick={this.handleSubmit}
+                                ><i className="material-icons right">send</i>Zapisz</button>
+                            </div>
+                        </div>
 
-                    <h1>{this.state.Worker.name} {this.state.Date}</h1>
-                    <div>
-                        <h1>Firmy</h1>
-                        {
-                            this.state.ClientFirms.map((f) =>
-                                <p>
-                                    <label>
-                                        <input type="checkbox" id={f.id} onChange={this.toggleCheckbox} />
-                                        <span>{f.name}</span>
-                                    </label>
-                                </p>
-                            )
-                        }
+                       
+                        <div className="div_zamknij">
+                        <button
+                            className="zamknij"
+                            onClick={() => {
+                                this.props.onClose()
+                            }}><i className="material-icons center">close</i></button>
+
+                        </div>
+
+
+
                     </div>
-
-                    <button
-                        className="btn waves-effect #1a237e indigo darken-4"
-                        onClick={() => {
-                            this.props.onClose()
-                        }}><i className="material-icons center">add</i>Zamknij</button>
-                        
-                        
-                        
-                        
-                    <button 
-                        className="btn waves-effect #1a237e indigo darken-4" 
-                        type="submit"
-                        onClick={this.handleSubmit} 
-                        ><i className="material-icons right">send</i>Zapisz</button>
-
                 </div>
 
             );
