@@ -22,7 +22,7 @@ export default class Plans extends Component {
             choosenWorker: null,
             choosenDate: null,
             choosenFirms: null,
-            display:null
+            display:null,
         };
     }
 
@@ -51,9 +51,15 @@ export default class Plans extends Component {
         this.loadTasks();
     }
 
-    closeModal = () => {
-        this.setState(() => this.state.isModalDisplay = false);
-        this.loadTasks();
+    closeModal = (reload) =>{ 
+        this.setState({
+            isModalDisplay : false,
+            display: null   
+        });
+        if(reload)
+        {
+            this.loadTasks();
+        }
     }
 
     render() {
@@ -61,18 +67,17 @@ export default class Plans extends Component {
             return <CircularSpinnerLoading />
         }
         else {
-            console.log("Tasks is = ", Array.isArray(this.state.Tasks));
-            if (Array.isArray(this.state.Tasks)) {
-                console.log(this.state.ClientFirms);
-                console.log(this.state.Tasks);
-            }
+            // console.log("Tasks is = ", Array.isArray(this.state.Tasks));
+            // if (Array.isArray(this.state.Tasks)) {
+            //     console.log(this.state.ClientFirms);
+            //     console.log(this.state.Tasks);
+            // }
 
             this.state.UnusedFirms.clear();
 
             this.state.Tasks[0].taskItems.forEach((item) => {
                 this.state.UnusedFirms.set(item.date, this.state.ClientFirms);
             });
-            console.log("Unused firms = ",this.state.UnusedFirms);
             return (
                 <div className="Home">
                     <div className="lander">
@@ -128,39 +133,10 @@ export default class Plans extends Component {
                                             }
                                         </tr>
                                     )
-                                    // (
-                                    // <tr>
-
-                                    //         <td>
-                                    //             <h3> Nieuzyte firmy </h3>
-                                    //         </td>
-                                    //         {
-                                    //             Array.from(this.state.UnusedFirms, ([key, value]) => 
-                                    //                 <td className="komorka">
-                                    //                     <ul>
-                                    //                         {
-                                    //                         value.map((firm) => <li>{firm.name}</li>)
-                                    //                         }
-                                    //                     </ul>
-                                    //                 </td>
-                                    //             )
-                                    //         }
-                                    //     </tr>
-                                    // )
                                 }
                             </tbody>
-
                         </table>
 
-                        <div id="modal1" className="modal">
-                            <div className="modal-content">
-                                <h4>Modal Header</h4>
-                                <p>A bunch of text</p>
-                            </div>
-                            <div className="modal-footer">
-                                <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
-                            </div>
-                        </div>
                         <Modal
                             isOpen={this.state.isModalDisplay}
                             contentLabel="Example Modal">
@@ -168,7 +144,7 @@ export default class Plans extends Component {
                                 worker={this.state.choosenWorker}
                                 date={this.state.choosenDate}
                                 clientFirms={this.state.choosenFirms}
-                                onClose={() => this.closeModal()} />
+                                onClose={(reload) => this.closeModal(reload)} />
                         </Modal>
                     </div>
                 </div>

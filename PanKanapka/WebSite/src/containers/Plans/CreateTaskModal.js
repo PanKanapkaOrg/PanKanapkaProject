@@ -6,7 +6,6 @@ export default class CreateTaskModal extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props);
 
         this.state = {
             isLoading: false,
@@ -20,14 +19,12 @@ export default class CreateTaskModal extends Component {
     toggleCheckbox = event => {
         event.preventDefault();
 
-        console.log(event.target.id);
         var id = event.target.id;
         if (this.state.SelectedFirms.has(id)) {
             this.state.SelectedFirms.delete(id);
         } else {
             this.state.SelectedFirms.add(id);
         }
-        console.log(this.state.SelectedFirms);
     }
 
     handleSubmit = event => {
@@ -36,12 +33,10 @@ export default class CreateTaskModal extends Component {
             workerId: this.state.Worker.id,
             clientFirmIds: Array.from(this.state.SelectedFirms)
         };
-        console.log(postData);
 
         axios.post('http://localhost:5000/api/Tasks/create', [postData]).then(repsonse => {
-            console.log(repsonse);
             if (repsonse.status == 200) {
-                this.props.onClose();
+                this.props.onClose(true);
             }
         });
     };
@@ -52,9 +47,6 @@ export default class CreateTaskModal extends Component {
             return <CircularSpinnerLoading />
         }
         else {
-
-            console.log(this.state.SelectedFirms);
-
             return (
                 <div className="Home">
                     <div className="lander">
@@ -81,7 +73,7 @@ export default class CreateTaskModal extends Component {
                                 this.state.ClientFirms.map((f) =>
                                     <div className="col s4 firma">
                                         <label>
-                                            <input type="checkbox" id={f.id} onChange={this.toggleCheckbox} />
+                                            <input type="checkbox" key={f.id} id={f.id} onChange={this.toggleCheckbox} />
                                             <span><h5 className="firmName">{f.name}</h5></span>
                                         </label>
                                     </div>
@@ -101,7 +93,7 @@ export default class CreateTaskModal extends Component {
                         <button
                             className="zamknij"
                             onClick={() => {
-                                this.props.onClose()
+                                this.props.onClose(false)
                             }}><i className="material-icons center">close</i></button>
 
                         </div>
