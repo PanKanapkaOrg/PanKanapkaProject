@@ -6,6 +6,7 @@ import CircularSpinnerLoading from "../CircularSpinnerLoading";
 import Modal from 'react-modal';
 import CreateTaskModal from "./CreateTaskModal"
 import "./plans.css";
+import axios from "axios";
 
 export default class Plans extends Component {
     constructor(props) {
@@ -22,7 +23,7 @@ export default class Plans extends Component {
             choosenWorker: null,
             choosenDate: null,
             choosenFirms: null,
-            display:null,
+            display: null,
         };
     }
 
@@ -42,7 +43,7 @@ export default class Plans extends Component {
 
                 GetTasks(taskFilter)
                     .then(tasks => {
-                        window.setTimeout(() => this.setState({ Tasks: tasks.data, Workers: workers, isLoading: false }), 1500);
+                        window.setTimeout(() => this.setState({ Tasks: tasks.data, Workers: workers, isLoading: false }), 1000);
                     });
             });
     }
@@ -51,13 +52,21 @@ export default class Plans extends Component {
         this.loadTasks();
     }
 
-    closeModal = (reload) =>{ 
+    deleteTask = (id) => {
+        // axios.post('http://localhost:5000/api/Tasks/create', [id]).then(repsonse => {
+        //     if (repsonse.status == 200) {
+        //         this.loadTasks();
+        //     }
+        // });
+        this.loadTasks();
+    }
+
+    closeModal = (reload) => {
         this.setState({
-            isModalDisplay : false,
-            display: null   
+            isModalDisplay: false,
+            display: null
         });
-        if(reload)
-        {
+        if (reload) {
             this.loadTasks();
         }
     }
@@ -99,7 +108,7 @@ export default class Plans extends Component {
                             <tbody>
                                 {
                                     this.state.Tasks.map((task) =>
-                                        <tr>
+                                        <tr className="wiersz">
 
                                             <td>
                                                 {task.worker.name} {task.worker.surname}
@@ -113,19 +122,26 @@ export default class Plans extends Component {
                                                     this.state.UnusedFirms.set(taskItem.date, newArray);
                                                     console.log("Unsused firms = ", taskItem.date, newArray, task.worker.name);
 
-                                                
+
                                                     return (<td className="komorka">
                                                         <ul>
                                                             {taskItem.firms.map((firm) => {
-                                                                return (<li>{firm.name}</li>)
+                                                                return (<li>
+                                                                    <button className="usun" onClick={() => {
+                                                                        this.deleteTask(firm.id)
+                                                                    }}>
+                                                                        <span className="nazwa_firmy">{firm.name}</span>
+                                                                        <i className="material-icons right">clear</i>
+                                                                    </button>
+                                                                </li>)
                                                             }
                                                             )}
                                                         </ul>
                                                         <button
                                                             className="btn waves-effect #1a237e indigo darken-4 add-plan"
-                                                            style={{display:this.state.display}}
+                                                            style={{ display: this.state.display }}
                                                             onClick={() => {
-                                                                this.setState({ display:'none', isModalDisplay: true, choosenWorker: task.worker, choosenDate: taskItem.date, choosenFirms: this.state.UnusedFirms.get(taskItem.date) })
+                                                                this.setState({ display: 'none', isModalDisplay: true, choosenWorker: task.worker, choosenDate: taskItem.date, choosenFirms: this.state.UnusedFirms.get(taskItem.date) })
                                                             }}><i className="material-icons center">add</i></button>
                                                     </td>)
                                                 }

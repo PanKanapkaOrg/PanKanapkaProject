@@ -1,10 +1,16 @@
 .add-plan{
     position: relative;
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 1s, opacity 0.5s linear;
+    
 }
 
-.komorka:hover button{
-    display: inline-block;
+.komorka:hover button.add-plan{
+    visibility: visible;
+    opacity: 1;
+    border: none;
+    background: none;
 }
 
 .komorka{
@@ -15,8 +21,12 @@
 }
 
 .komorka:hover{
-    background-color: #99CEFA;
+    background-color: rgba(187, 187, 187, 0.486);
 
+}
+
+tr.wiersz{
+    background-color: rgb(230, 230, 230);
 }
 
 .lewy{
@@ -60,6 +70,7 @@
 
 .firma{
     transition: all .2s ease-in-out;
+    margin-top: 20px;
 }
 
 .firma:hover{
@@ -68,4 +79,34 @@
 
 .s12 h4{
     margin-bottom: 20px;
+}
+
+.usun:hover{
+    color: rgb(255, 0, 0);
+}
+
+.usun:hover  i{
+    visibility: visible;
+    opacity: 1;
+    border: none;
+    background: none;
+}
+
+.usun  i{
+    position: relative;
+    visibility: hidden;
+    opacity: 1;
+    color: red;
+    margin-left: 5px;
+}
+
+.usun{
+    padding: 0;
+    border: none;
+    background: none;
+    background-color: transparent;
+}
+
+.nazwa_firmy{
+    line-height: 25px;
 }

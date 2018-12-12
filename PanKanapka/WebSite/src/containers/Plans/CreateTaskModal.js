@@ -28,6 +28,7 @@ export default class CreateTaskModal extends Component {
     }
 
     handleSubmit = event => {
+        this.setState({isLoading:true});
         var postData = {
             date: this.state.Date,
             workerId: this.state.Worker.id,
@@ -36,7 +37,7 @@ export default class CreateTaskModal extends Component {
 
         axios.post('http://localhost:5000/api/Tasks/create', [postData]).then(repsonse => {
             if (repsonse.status == 200) {
-                this.props.onClose(true);
+                window.setTimeout(() => this.props.onClose(true), 1000);
             }
         });
     };
@@ -45,6 +46,59 @@ export default class CreateTaskModal extends Component {
     render() {
         if (this.state.isLoading) {
             return <CircularSpinnerLoading />
+        }
+        if (this.state.ClientFirms.length==0) {
+            console.log(this.state.ClientFirms);
+            return(
+                <div className="Home">
+                    <div className="lander">
+                        <div className="row">
+                            <div className="col s12">
+                                <h1>Tworzenie nowego zdania dla pracownika</h1>
+                            </div>
+                            <div className="col s6 lewy">
+                                <h4><b>Pracownik:</b></h4>
+                            </div>
+                            <div className="col s6 prawy">
+                                <h4>{this.state.Worker.name}</h4>
+                            </div>
+                            <div className="col s6 lewy">
+                                <h4><b>Data:</b></h4>
+                            </div>
+                            <div className="col s6 prawy">
+                                <h4>{this.state.Date.substring(0, 10)}</h4>
+                            </div>
+                            <div className="col s12">
+                                <h4><b>Firmy</b></h4>
+                            </div>
+                            <div>
+                                <label>
+                                    <span><h4>Brak dostępnych firm</h4></span>
+                                </label>
+                            </div>
+
+                            <div className="col s12">
+                                <button
+                                    className="btn waves-effect #1a237e indigo darken-4 zapisz"
+                                    onClick={() => {
+                                        this.props.onClose(false)
+                                    }}>
+                                Zamknij</button>
+                            </div>
+
+                        </div>
+                        <div className="div_zamknij">
+                            <button
+                                className="zamknij"
+                                onClick={() => {
+                                    this.props.onClose(false)
+                                }}><i className="material-icons center">close</i>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            )
         }
         else {
             return (
@@ -79,7 +133,7 @@ export default class CreateTaskModal extends Component {
                                     </div>
                                 )
                             }
-                            <div className="col s2 offset-s5">
+                            <div className="col s12">
                                 <button
                                     className="btn waves-effect #1a237e indigo darken-4 zapisz"
                                     type="submit"
@@ -87,19 +141,15 @@ export default class CreateTaskModal extends Component {
                                 ><i className="material-icons right">send</i>Zapisz</button>
                             </div>
                         </div>
-
-                       
                         <div className="div_zamknij">
-                        <button
-                            className="zamknij"
-                            onClick={() => {
-                                this.props.onClose(false)
-                            }}><i className="material-icons center">close</i></button>
+                            <button
+                                className="zamknij"
+                                onClick={() => {
+                                    this.props.onClose(false)
+                                }}><i className="material-icons center">close</i>
+                            </button>
 
                         </div>
-
-
-
                     </div>
                 </div>
 
