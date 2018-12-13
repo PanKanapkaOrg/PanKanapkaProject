@@ -10,7 +10,7 @@ namespace Api.Web.Controllers
     public class ClientFirmsController : Controller
     {
         private IClientFirmsRepository _clientFirmsRepository;
-
+        
         public ClientFirmsController(IClientFirmsRepository clientFirmsRepository)
         {
             _clientFirmsRepository = clientFirmsRepository;

@@ -39,6 +39,9 @@ namespace Api.Web
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "PanKanapka API", Description = "PanKanapka API" });
+
+                var xmlPath = System.AppDomain.CurrentDomain.BaseDirectory + @"Api.Web.xml";
+                c.IncludeXmlComments(xmlPath);
             }
 
             );
