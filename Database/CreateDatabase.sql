@@ -178,14 +178,14 @@ insert into [Workers] values
 ('Anna','Sęk',17,1)
 
 insert into [ClientFirms] values
-('Hummingbird Corp','Traktorowa 17','logo', 'Lódź'),
-('Micro Industries','Gdańska 12','logo', 'Lódź'),
-('Prime Solutions','Łąkowa 22','logo', 'Lódź'),
-('Butterflyght','Dostawcza 12','logo', 'Lódź'),
-('Fujitsu','Fabryczna 17 ','logo', 'Lódź'),
-('Barry Callebaut','Wolczanska 180','logo', 'Lódź'),
-('TME','Ustronna 41','logo', 'Lódź'),
-('Coats','Kaczeńcowa 16','logo', 'Lódź')
+('Hummingbird Corp','Traktorowa 17','https://media.licdn.com/dms/image/C560BAQEFce4b65Jt3w/company-logo_200_200/0?e=2159024400&v=beta&t=KxSQhD54dT3H2YwCHyzqWmY0-GFaxnXvyB79IC22bpM', 'Lódź'),
+('Micro Industries','Gdańska 12','https://media.glassdoor.com/sqll/106487/micro-industries-squarelogo-1461240302453.png', 'Lódź'),
+('Prime Solutions','Łąkowa 22','https://media.glassdoor.com/sqll/423197/prime-solutions-squarelogo-1441868871543.png', 'Lódź'),
+('Butterflyght','Dostawcza 12','http://healthdotcom.in/UploadImage/WC5SIez3.jpg', 'Lódź'),
+('Fujitsu','Fabryczna 17 ','https://cdn.iconscout.com/icon/free/png-256/fujitsu-285143.png', 'Lódź'),
+('Barry Callebaut','Wolczanska 180','data:image/png;base64,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', 'Lódź'),
+('TME','Ustronna 41','http://inveo.com.pl/wp-content/uploads/2018/01/TME-logo.png', 'Lódź'),
+('Coats','Kaczeńcowa 16','https://pertay.pl/wp-content/uploads/2016/12/coats-logo-mini.png', 'Lódź')
 
 
 insert into [Clients] values
@@ -277,28 +277,36 @@ where w.ID in (1,2,3) and t.taskDate between CONVERT(DATETIME, '2018-10-27', 102
 
 
 --Procedura logowania
+go
 create or alter procedure LoginProcedure @mail varchar(50), @password varchar(50)
 as
+declare @role varchar(20);
+declare @auth bigint;
+
+select @role = role, @auth = ID
+from Authentication 
+where mail=@mail and pass=@password;
+	
 begin
 	if @role = 'Manager'  
 	begin
-		select @auth as AuthId, @role as Role, m.name as Name, m.surname as Surname, CateringFirmID as FirmId,
-		c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, c.DayOfWork as DayOfWork
+		select @auth as AuthId, m.ID as Id, @role as Role, m.name as Name, m.surname as Surname, CateringFirmID as FirmId,
+		c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, null as DayOfWork
 		from Managers m
 		join CateringFirms c on m.CateringFirmID=c.ID 
 		where AuthID = @auth
 	end
 	else if @role = 'Worker'
 	begin
-		select @auth as AuthID, @role as Role, w.name as Name, surname as Surname, CateringFirmID as FirmId,
-		c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, c.DayOfWork as DayOfWork
+		select @auth as AuthID, w.ID as Id, @role as Role, w.name as Name, surname as Surname, CateringFirmID as FirmId,
+		c.name as FirmName, c.address as Address, c.info as Info, c.logoUrl as LogoUrl, null as DayOfWork
 		from Workers w
 		join CateringFirms c on w.CateringFirmID=c.ID 
 		where AuthID = @auth
 	end
 	else if @role ='Client'
 	begin
-		select @auth as AuthId, @role as Role, cl.name as Name, surname as Surname, ClientFirmID as FirmId,
+		select @auth as AuthId, c.ID as Id, @role as Role, cl.name as Name, surname as Surname, ClientFirmID as FirmId,
 		c.name as FirmName, c.address as Address, null as Info, c.logoUrl as LogoUrl, null as DayOfWork
 		from Clients cl
 		join ClientFirms c on cl.clientFirmID=c.ID 

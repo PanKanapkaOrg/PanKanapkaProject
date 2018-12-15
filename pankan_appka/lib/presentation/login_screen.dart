@@ -16,17 +16,17 @@ class _LoginScreenState extends State<LoginScreen> {
   LoginProvider loginProvider;
   _LoginScreenState(this.loginProvider);
 
-  TextEditingController mailController = TextEditingController(text:"Wiktor_Lewandowski@mail.com");
-  TextEditingController passwordController = TextEditingController(text:"xze1234");
+  TextEditingController mailController = TextEditingController(text:"Emilia_Kowalska@mail.com");
+  TextEditingController passwordController = TextEditingController(text:"1345qwe");
 
-  //bool isLoading = false;
+  bool isLoading = false;
 
   Future _login(BuildContext context) async {
-    //this.setState(() => isLoading = true);
+    this.setState(() => isLoading = true);
 
     loginProvider.processLoginData(mailController.text, passwordController.text)
       .then((values){
-        //this.setState(() => isLoading = false);
+        this.setState(() => isLoading = false);
         if(values['error'] != null) {
           
         }
@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
       keyboardType: TextInputType.emailAddress,
       autofocus: false,
       controller: mailController,
-      //enabled: !isLoading,
+      enabled: !isLoading,
       decoration: InputDecoration(
         hintText: 'Email',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
       autofocus: false,
       controller: passwordController,
       obscureText: true,
-      //enabled: !isLoading,
+      enabled: !isLoading,
       decoration: InputDecoration(
         hintText: 'Haslo',
         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: ListView(
+        child: isLoading ? CircularProgressIndicator() : ListView(
           shrinkWrap: true,
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           children: <Widget>[

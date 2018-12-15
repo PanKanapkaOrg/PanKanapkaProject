@@ -55,7 +55,7 @@ export default class Login extends Component {
 
             this.props.setAppStateProperty("managerName", login.name);
             this.props.setAppStateProperty("managerSurname", login.surname);
-            this.props.setAppStateProperty("cateringFirmName", "Kanapka w pracy");
+            this.props.setAppStateProperty("cateringFirmName", login.firm.firmName);
 
             this.props.setAppStateProperty("isAuthenticated", true);
           }

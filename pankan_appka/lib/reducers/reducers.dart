@@ -4,33 +4,34 @@ import 'package:redux/redux.dart';
 
 AppState appReducer(AppState state, action) {
   return AppState(
-    activeTab: tabsReducer(state.activeTab, action),
-    choosenDay: updateChoosenDayReducer(state.choosenDay, action),
-    loggedInWorker: loggedInWorkerReducer(state.loggedInWorker, action),
-    isLoading: loadingReducer(state.isLoading, action),
-    workerTasks: workerTasksReducer(state.workerTasks, action)
-    );
+      activeTab: tabsReducer(state.activeTab, action),
+      choosenDay: updateChoosenDayReducer(state.choosenDay, action),
+      loggedInWorker: loggedInWorkerReducer(state.loggedInWorker, action),
+      isLoading: loadingReducer(state.isLoading, action),
+      workerTasks: workerTasksReducer(state.workerTasks, action));
 }
 
-final updateChoosenDayReducer = TypedReducer<DateTime, dynamic>((state, action) =>
-  action is ChangeDayAction ? action.choosenDay : state
-);
+final updateChoosenDayReducer = TypedReducer<DateTime, dynamic>(
+    (state, action) => action is ChangeDayAction ? action.choosenDay : state);
 
-final workerTasksReducer = TypedReducer<Iterable<WorkerDayTask>, dynamic>((state, action){
-  if(action is WorkerTasksLoadedAction) {
-    return List<WorkerDayTask>.from(action.tasks)..addAll(state);
-  }
-  return state;
-});
+final workerTasksReducer = combineReducers<Iterable<WorkerDayTask>>([
+  TypedReducer<Iterable<WorkerDayTask>, WorkerTasksLoadedAction>(
+      (state, action) => List<WorkerDayTask>.from(action.tasks)..addAll(state)),
+  TypedReducer<Iterable<WorkerDayTask>, WorkerLogOffAction>(
+      (state, action) => [])
+]);
 
-final loadingReducer = combineReducers<bool>(
-  [
-    TypedReducer<bool, LoadWorkerTasksAction>((state, action) => true),
-    TypedReducer<bool, WorkerTasksLoadedAction>((state, action) => false),
-    TypedReducer<bool, WorkerTasksNotLoadedAction>((state, action) => false)
-  ]
-);
+final loadingReducer = combineReducers<bool>([
+  TypedReducer<bool, LoadWorkerTasksAction>((state, action) => true),
+  TypedReducer<bool, WorkerTasksLoadedAction>((state, action) => false),
+  TypedReducer<bool, WorkerTasksNotLoadedAction>((state, action) => false)
+]);
 
-final tabsReducer = TypedReducer<AppTab, UpdateTabAction>((activeTab, action) => action.newTab);
+final tabsReducer =
+    TypedReducer<AppTab, UpdateTabAction>((activeTab, action) => action.newTab);
 
-final loggedInWorkerReducer = TypedReducer<Worker, WorkerLoggedInAction>((activeTab, action) => action.worker);
+final loggedInWorkerReducer = combineReducers<Worker>([
+  TypedReducer<Worker, WorkerLoggedInAction>(
+      (activeTab, action) => action.worker),
+  TypedReducer<Worker, WorkerLogOffAction>((activeTab, action) => null),
+]);

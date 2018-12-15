@@ -36,3 +36,7 @@ class WorkerLoggedInAction {
 
   WorkerLoggedInAction(this.worker);
 }
+
+class WorkerLogOffAction {
+  WorkerLogOffAction();
+}
