@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:pankan_appka/actions/actions.dart';
 import 'package:pankan_appka/containers/active_tab.dart';
 import 'package:pankan_appka/containers/app_loading.dart';
 import 'package:pankan_appka/containers/choose_day.dart';
@@ -38,6 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
       return Scaffold(
           appBar: AppBar(
             title: Text('Serwis kateringowy'),
+            actions: <Widget>[
+              IconButton(icon: Icon(Icons.power_settings_new),
+              onPressed: () => StoreProvider.of<AppState>(context).dispatch(WorkerLogOffAction())),
+              SizedBox(width: 20)
+            ],
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(40.0),
               child: Container(

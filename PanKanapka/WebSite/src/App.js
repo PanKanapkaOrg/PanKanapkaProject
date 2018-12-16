@@ -47,7 +47,7 @@ class App extends Component {
         <div className="App">
           <Navbar  isAuthenticated={childProps.isAuthenticated} managerName={childProps.managerName} managerSurname={childProps.managerSurname} handleLogout={() => this.setAppStateProperty("isAuthenticated",false)}/>
           <Routes  childProps={childProps}/>
-          <Footer  childProps={childProps} />
+          {/* <Footer  childProps={childProps} /> */}
          
         </div>
       </BrowserRouter>

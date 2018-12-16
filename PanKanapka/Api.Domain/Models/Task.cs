@@ -11,6 +11,7 @@ namespace Api.Domain.Models
 
     public class FirmTask
     {
+        public long TaskId { get; set; }
         public long Id { get; set; }
         public string LogoUrl { get; set; }
         public string Name { get; set; }

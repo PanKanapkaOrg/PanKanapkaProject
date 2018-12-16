@@ -25,8 +25,8 @@ namespace Api.Web.Controllers
             return Ok();
         }
 
-        [HttpDelete("api/[controller]/delete")]
-        public void DeleteTasks(IEnumerable<long> taskIds)
+        [HttpPost("api/[controller]/delete")]
+        public void DeleteTasks([FromBody] IEnumerable<long> taskIds)
         {
             _tasksRepository.DeleteTasks(taskIds);
         }

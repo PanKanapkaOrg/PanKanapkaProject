@@ -6,26 +6,37 @@ import CircularSpinnerLoading from "../CircularSpinnerLoading";
 import Modal from 'react-modal';
 import CreateTaskModal from "./CreateTaskModal"
 import "./plans.css";
+import axios from "axios";
 
 export default class Plans extends Component {
     constructor(props) {
         super(props);
-
+        //var currentDay = new Date('2018-10-27');
+        var currentDay = new Date();
         this.state = {
             isLoading: true,
             ClientFirms: [],
             Workers: [],
             Tasks: [],
-
+            UnusedFirms: new Map(),
+            Today: currentDay,
+            ChoosenDay: currentDay,
             isModalDisplay: false,
             choosenWorker: null,
             choosenDate: null,
-            choosenFirms: null
+            choosenFirms: null,
+            display: null,
         };
     }
 
+    getMonday = (date) => {
+        var d = new Date(date);
+        d.setDate(d.getDate() - (d.getDay() + 6) % 7);
+        return d;
+    }
 
-    componentDidMount() {
+    loadTasks = () => {
+        this.setState({ isLoading: true });
 
         GetClientFirms(this.props)
             .then(firms => this.setState({ ClientFirms: firms }));
@@ -33,20 +44,39 @@ export default class Plans extends Component {
             .then(workers => {
                 var taskFilter = {
                     WorkerIds: workers.map(w => w.id),
-                    Date: "2018-10-27",
-                    DaysBefore: 3,
-                    DaysAfter: 3
+                    Date: this.getMonday(this.state.ChoosenDay),
+                    DaysBefore: 0,
+                    DaysAfter: 7
                 }
 
                 GetTasks(taskFilter)
                     .then(tasks => {
-                        window.setTimeout(() => this.setState({ Tasks: tasks.data, Workers: workers, isLoading: false }), 1500);
+                        window.setTimeout(() => this.setState({ Tasks: tasks.data, Workers: workers, isLoading: false }), 1000);
                     });
             });
+    }
 
+    componentDidMount() {
+        this.loadTasks();
+    }
 
+    deleteTask = (id) => {
+        axios.post('http://localhost:5000/api/Tasks/delete', [id]).then(repsonse => {
+            if (repsonse.status == 200) {
+                this.loadTasks();
+            }
+        });
+        this.loadTasks();
+    }
 
-
+    closeModal = (reload) => {
+        this.setState({
+            isModalDisplay: false,
+            display: null
+        });
+        if (reload) {
+            this.loadTasks();
+        }
     }
 
     render() {
@@ -59,20 +89,41 @@ export default class Plans extends Component {
                 console.log(this.state.ClientFirms);
                 console.log(this.state.Tasks);
             }
+
+            this.state.UnusedFirms.clear();
+
+            this.state.Tasks[0].taskItems.forEach((item) => {
+                this.state.UnusedFirms.set(item.date, this.state.ClientFirms);
+            });
+            console.log("Unused firms = ", this.state.UnusedFirms);
             return (
                 <div className="Home">
                     <div className="lander">
                         <h1>Plany dla pracowników</h1><br></br>
-                        
+
                         <table className="highlight centered">
                             <thead>
                                 <tr>
                                     <th>Pracownik</th>
                                     {
                                         this.state.Tasks[0].taskItems.map((item) =>
-                                            <th>
-                                                {item.date.substring(0, 10)}
-                                            </th>
+                                            {
+                                                var date = new Date(item.date);
+                                                var dateStr = new Date(item.date).toLocaleDateString('PL-pl');
+                                                var style = {
+                                                    color:'red',
+                                                    fontWeight:'bold'
+                                                };
+
+                                                if(date.getDate() == this.state.Today.getDate())
+                                                {
+                                                    return <th style={style}>{dateStr}</th>
+                                                }
+                                                else
+                                                {
+                                                    return <th>{dateStr}</th>;
+                                                }
+                                            }
                                         )
                                     }
                                 </tr>
@@ -80,49 +131,79 @@ export default class Plans extends Component {
                             <tbody>
                                 {
                                     this.state.Tasks.map((task) =>
-                                        <tr>
+                                        <tr className="wiersz">
 
                                             <td>
                                                 {task.worker.name} {task.worker.surname}
                                             </td>
                                             {
-                                                task.taskItems.map((taskItem) =>
-                                                    <td>
+                                                task.taskItems.map((taskItem) => {
+                                                    var newArray = this.state.UnusedFirms.get(taskItem.date).filter(item => {
+                                                        //console.log("item id = ", item.id);
+                                                        return -1 === taskItem.firms.findIndex(firm => firm.id == item.id);
+                                                    });
+                                                    this.state.UnusedFirms.set(taskItem.date, newArray);
+                                                    //console.log("Unsused firms = ", taskItem.date, newArray, task.worker.name);
+                                                    //console.log(Date.parse(taskItem.date), this.state.Today);
+
+                                                    return (<td className="komorka">
                                                         <ul>
-                                                            {taskItem.firms.map((firm) =>
-                                                                <li>{firm.name}</li>
+                                                            {taskItem.firms.map((firm) => {
+                                                                return (<li>
+                                                                    <button className="usun" onClick={() => {
+                                                                        this.deleteTask(firm.taskId)
+                                                                    }}>
+                                                                        <span className="nazwa_firmy">{firm.name}</span>
+                                                                        <i className="material-icons right">clear</i>
+                                                                    </button>
+                                                                </li>)
+                                                            }
                                                             )}
                                                         </ul>
-                                                        <button 
-                                                                        className="btn waves-effect #1a237e indigo darken-4 add-plan"  
-                                                                        onClick={() => {
-                                                                            this.setState({ isModalDisplay : true, choosenWorker : task.worker, choosenDate:taskItem.date, choosenFirms:this.state.ClientFirms })
-                                                                        }}><i className="material-icons center">add</i></button>
-                                                    </td>
+                                                        <button
+                                                            className="btn waves-effect #1a237e indigo darken-4 add-plan"
+                                                            style={{ display: this.state.display }}
+                                                            onClick={() => {
+                                                                this.setState({ display: 'none', isModalDisplay: true, choosenWorker: task.worker, choosenDate: taskItem.date, choosenFirms: this.state.UnusedFirms.get(taskItem.date) })
+                                                            }}><i className="material-icons center">add</i></button>
+                                                    </td>)
+                                                }
                                                 )
                                             }
                                         </tr>
                                     )
                                 }
-                            </tbody>
 
+                                <tr>
+
+                                    <td>
+                                        <b>Nieuzyte firmy</b>
+                                    </td>
+                                    {
+                                        Array.from(this.state.UnusedFirms, ([key, value]) =>
+                                            <td className="komorka">
+                                                <ul>
+                                                    {
+                                                        value.map((firm) => <li>{firm.name}</li>)
+                                                    }
+                                                </ul>
+                                            </td>
+                                        )
+                                    }
+                                </tr>
+
+                            </tbody>
                         </table>
 
-                        <div id="modal1" className="modal">
-                            <div className="modal-content">
-                                <h4>Modal Header</h4>
-                                <p>A bunch of text</p>
-                            </div>
-                            <div className="modal-footer">
-                                <a href="#!" className="modal-close waves-effect waves-green btn-flat">Agree</a>
-                            </div>
-                        </div>
                         <Modal
                             isOpen={this.state.isModalDisplay}
                             contentLabel="Example Modal">
-                            <CreateTaskModal worker={this.state.choosenWorker} date={this.state.choosenDate} clientFirms={this.state.choosenFirms} onClose={() => this.setState(() => this.state.isModalDisplay = false)} />
+                            <CreateTaskModal
+                                worker={this.state.choosenWorker}
+                                date={this.state.choosenDate}
+                                clientFirms={this.state.choosenFirms}
+                                onClose={(reload) => this.closeModal(reload)} />
                         </Modal>
-
                     </div>
                 </div>
             );

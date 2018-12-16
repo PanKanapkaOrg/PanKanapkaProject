@@ -68,12 +68,34 @@ namespace Db.Contracts
         public async Task<IEnumerable<Api.Domain.Models.WorkerTask>> GetTasks(TasksFilter tasksFilter)
         {
             string getTaskSqlQuery =
-                @"select t.clientFirmID as ClientFirmID, w.ID as WorkerId, w.name as WorkerName, w.surname as WorkerSurname, t.taskDate as TaskDate, cf.logoUrl as LogoUrl, 
-                cf.name as ClientFirmName, cf.address as Address, t.isDone as IsDone 
-                from Tasks t 
-                join Workers w on w.ID = t.workerID 
-                join ClientFirms cf on cf.ID = t.clientFirmID 
-                where w.ID in @workerIds and t.taskDate between CONVERT(DATETIME, @Date, 102)-@DaysBefore and CONVERT(DATETIME, @Date, 102)+@DaysAfter; ";
+                @"
+                with dates as (
+                select top (@dateRangeLength) 
+                n = ROW_NUMBER() OVER (ORDER BY [object_id])
+                from sys.all_objects
+                )
+
+                select cros.dates as TaskDate, 
+                    cros.id as WorkerId, 
+                    cros.name as WorkerName, 
+                    cros.surname as WorkerSurname, 
+                    t.isDone as IsDone, 
+                    t.ID as TaskId,
+                    t.clientFirmID as ClientFirmID,
+                    cf.logoUrl as LogoUrl, 
+                    cf.name as ClientFirmName, 
+                    cf.address as Address
+                from Tasks t
+                right JOIN
+                (
+                    select *
+                    from (select DATEADD(DAY, n-1, @from) as dates from dates) as d
+                    cross join Workers as w
+                    where w.ID in @WorkerIds
+                ) as cros
+                on t.taskDate = cros.dates and t.workerId = cros.id
+                left join ClientFirms cf on cf.ID = t.clientFirmID 
+                ";
 
             using (dbConn)
             {
@@ -83,11 +105,17 @@ namespace Db.Contracts
                     throw new Exception("Nie udalo sie polaczyc z baza");
                 }
 
-                IEnumerable<TaskDbResult> tasks = dbConn.Query<TaskDbResult>(getTaskSqlQuery, tasksFilter);
+                DateTime from = tasksFilter.Date.Subtract(TimeSpan.FromDays(tasksFilter.DaysBefore));
+                int dateRangeLength = tasksFilter.DaysBefore + tasksFilter.DaysAfter;
+
+                IEnumerable<TaskDbResult> tasks =
+                    dbConn.Query<TaskDbResult>(getTaskSqlQuery,
+                    new { dateRangeLength, from= from.Date, tasksFilter.WorkerIds });
+
                 List<WorkerTask> workerTasks = tasks.GroupBy(
                 dbTask => new Worker()
                 {
-                    Id = dbTask.WorkerId,
+                    Id = dbTask.WorkerId.Value,
                     Name = dbTask.WorkerName,
                     Surname = dbTask.WorkerSurname
                 },
@@ -95,51 +123,33 @@ namespace Db.Contracts
                     new WorkerTask()
                     {
                         Worker = worker,
-
-                        TaskItems = groupedTasksByWorkerId.GroupBy(dbTask => dbTask.TaskDate, (date, groupedTasks) =>
-                        new TaskItem()
-                        {
-                            Date = date,
-                            Firms = groupedTasks.Select(dbTask3 =>
-                                    {
-                                        return new FirmTask()
-                                        {
-                                            Id = dbTask3.ClientFirmID,
-                                            Address = dbTask3.Address,
-                                            IsActiveTask = !dbTask3.IsDone,
-                                            LogoUrl = dbTask3.LogoUrl,
-                                            Name = dbTask3.ClientFirmName
-                                        };
-                                    })
-                        })
+                        TaskItems = groupedTasksByWorkerId
+                        .GroupBy(
+                            dbTask => dbTask.TaskDate,
+                            (date, groupedTasks) =>
+                                new TaskItem()
+                                {
+                                    Date = date.Value,
+                                    Firms = groupedTasks
+                                            .Where(dbTask3 => dbTask3.TaskId != null)
+                                            .Select(dbTask3 =>
+                                            {
+                                                return new FirmTask()
+                                                {
+                                                    TaskId = dbTask3.TaskId.Value,
+                                                    Id = dbTask3.ClientFirmID.Value,
+                                                    Address = dbTask3.Address,
+                                                    IsActiveTask = !dbTask3.IsDone.Value,
+                                                    LogoUrl = dbTask3.LogoUrl,
+                                                    Name = dbTask3.ClientFirmName
+                                                };
+                                            })
+                                })
                     }
                 ).ToList();
 
-                List<DateTime> dateRange = 
-                    DateRange(
-                        from: tasksFilter.Date.Subtract(TimeSpan.FromDays(tasksFilter.DaysBefore)), 
-                        forDays:tasksFilter.DaysAfter+tasksFilter.DaysBefore).ToList();
-
-                for (int i = 0; i < workerTasks.Count; i++)
-                {
-                        var daysThatNotExist = dateRange
-                        .Where(d => !workerTasks[i].TaskItems.Any(ti => ti.Date == d))
-                        .Select(d => new TaskItem(){
-                            Date = d,
-                            Firms = new List<FirmTask>(0)
-                        }).ToList();
-
-                    workerTasks[i].TaskItems = workerTasks[i].TaskItems.Concat(daysThatNotExist).OrderBy(ti => ti.Date);
-                }
-
                 return workerTasks;
             }
-        }
-
-        private IEnumerable<DateTime> DateRange(DateTime from, int forDays)
-        {
-            return Enumerable.Range(0, forDays + 1)
-                             .Select(d => from.AddDays(d));
         }
     }
 }
