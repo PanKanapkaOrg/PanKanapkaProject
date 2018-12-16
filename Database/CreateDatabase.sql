@@ -316,3 +316,50 @@ end
 
 
 
+
+
+select t.ID as TaskId,  
+t.clientFirmID as ClientFirmID, 
+w.ID as WorkerId, 
+w.name as WorkerName, 
+w.surname as WorkerSurname, 
+t.taskDate as TaskDate, 
+cf.logoUrl as LogoUrl, 
+    cf.name as ClientFirmName, 
+	cf.address as Address, 
+	t.isDone as IsDone 
+from Tasks t 
+left join Workers w on w.ID = t.workerID 
+join ClientFirms cf on cf.ID = t.clientFirmID 
+where w.ID in (3,4) and t.taskDate between CONVERT(DATETIME, '2018-05-16', 102)-3 and CONVERT(DATETIME, '2018-05-16', 102)+1;
+
+
+select * from Tasks;
+
+
+with dates as (
+select top (datediff(day, '2018-10-26', '2018-10-30') + 1) 
+n = ROW_NUMBER() OVER (ORDER BY [object_id])
+from sys.all_objects
+)
+
+select cros.dates as TaskDate, 
+	cros.id as WorkerId, 
+	cros.name as WorkerName, 
+	cros.surname as WorkerSurname, 
+	t.isDone as IsDone, 
+	t.ID as TaskId,
+	t.clientFirmID as ClientFirmID,
+	cf.logoUrl as LogoUrl, 
+    cf.name as ClientFirmName, 
+	cf.address as Address
+from Tasks t
+right JOIN
+(
+	select *
+	from (select DATEADD(DAY, n-1, '2018-10-26') as dates from dates) as d
+	cross join Workers as w
+	where w.ID in (3, 1)
+) as cros
+on t.taskDate = cros.dates and t.workerId = cros.id
+left join ClientFirms cf on cf.ID = t.clientFirmID 

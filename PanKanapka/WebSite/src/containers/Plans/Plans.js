@@ -11,20 +11,28 @@ import axios from "axios";
 export default class Plans extends Component {
     constructor(props) {
         super(props);
-
+        //var currentDay = new Date('2018-10-27');
+        var currentDay = new Date();
         this.state = {
             isLoading: true,
             ClientFirms: [],
             Workers: [],
             Tasks: [],
             UnusedFirms: new Map(),
-
+            Today: currentDay,
+            ChoosenDay: currentDay,
             isModalDisplay: false,
             choosenWorker: null,
             choosenDate: null,
             choosenFirms: null,
             display: null,
         };
+    }
+
+    getMonday = (date) => {
+        var d = new Date(date);
+        d.setDate(d.getDate() - (d.getDay() + 6) % 7);
+        return d;
     }
 
     loadTasks = () => {
@@ -36,9 +44,9 @@ export default class Plans extends Component {
             .then(workers => {
                 var taskFilter = {
                     WorkerIds: workers.map(w => w.id),
-                    Date: "2018-10-27",
-                    DaysBefore: 3,
-                    DaysAfter: 3
+                    Date: this.getMonday(this.state.ChoosenDay),
+                    DaysBefore: 0,
+                    DaysAfter: 7
                 }
 
                 GetTasks(taskFilter)
@@ -99,9 +107,23 @@ export default class Plans extends Component {
                                     <th>Pracownik</th>
                                     {
                                         this.state.Tasks[0].taskItems.map((item) =>
-                                            <th>
-                                                {item.date.substring(0, 10)}
-                                            </th>
+                                            {
+                                                var date = new Date(item.date);
+                                                var dateStr = new Date(item.date).toLocaleDateString('PL-pl');
+                                                var style = {
+                                                    color:'red',
+                                                    fontWeight:'bold'
+                                                };
+
+                                                if(date.getDate() == this.state.Today.getDate())
+                                                {
+                                                    return <th style={style}>{dateStr}</th>
+                                                }
+                                                else
+                                                {
+                                                    return <th>{dateStr}</th>;
+                                                }
+                                            }
                                         )
                                     }
                                 </tr>
@@ -121,8 +143,8 @@ export default class Plans extends Component {
                                                         return -1 === taskItem.firms.findIndex(firm => firm.id == item.id);
                                                     });
                                                     this.state.UnusedFirms.set(taskItem.date, newArray);
-                                                    console.log("Unsused firms = ", taskItem.date, newArray, task.worker.name);
-
+                                                    //console.log("Unsused firms = ", taskItem.date, newArray, task.worker.name);
+                                                    //console.log(Date.parse(taskItem.date), this.state.Today);
 
                                                     return (<td className="komorka">
                                                         <ul>
