@@ -40,7 +40,7 @@ class PanKanapkaApp extends StatelessWidget {
            isLoggedIn ?  HomeScreen(
             onInit: () {
               StoreProvider.of<AppState>(context).dispatch(
-                ChangeDayAction(choosenDay: DateTime.parse("2018-10-27"))
+                ChangeDayAction(choosenDay: DateTime.now())
               );
             },
           )

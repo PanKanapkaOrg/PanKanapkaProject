@@ -21,7 +21,7 @@ class AppState {
 
   factory AppState.loading() => AppState(isLoading: true);
 
-  WorkerDayTask get currentDay => workerTasks.firstWhere((task) => task.date == choosenDay, orElse: () => WorkerDayTask(date: choosenDay, firms: []));
+  WorkerDayTask get currentDay => workerTasks.firstWhere((task) => task.date.difference(choosenDay).inDays == 0, orElse: () => WorkerDayTask(date: choosenDay, firms: []));
 
   AppState copyWith({
     bool isLoading,
