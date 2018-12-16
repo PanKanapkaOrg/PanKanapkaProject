@@ -1,19 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
 using Api.Domain.Components;
 using Db.Contracts;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Api.Web
 {
@@ -42,6 +36,15 @@ namespace Api.Web
             services.AddScoped<IClientFirmsRepository, ClientFirmsDbRepository>();
             services.AddScoped<ITasksRepository, TasksDbRepository>();
             services.AddScoped<ILoginRepository, LoginDbRepository>();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "PanKanapka API", Description = "PanKanapka API" });
+
+                var xmlPath = System.AppDomain.CurrentDomain.BaseDirectory + @"Api.Web.xml";
+                c.IncludeXmlComments(xmlPath);
+            }
+
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +58,12 @@ namespace Api.Web
             app.UseCors("AllowAllOrigins");
             app.UseMiddleware(typeof(ErrorHandlingMiddleware));
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json","PanKanapka API");
+            });
         }
     }
 }
