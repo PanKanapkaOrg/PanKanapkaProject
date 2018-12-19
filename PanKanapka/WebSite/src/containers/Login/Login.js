@@ -27,14 +27,14 @@ export default class Login extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.setAppStateProperty("authId", 1);
-    this.props.setAppStateProperty("cateringFirmId", 1);
+    // this.props.setAppStateProperty("authId", 1);
+    // this.props.setAppStateProperty("cateringFirmId", 1);
 
-    this.props.setAppStateProperty("managerName", "Mateusz");
-    this.props.setAppStateProperty("managerSurname", "Sudak");
-    this.props.setAppStateProperty("cateringFirmName", "Kanapka w pracy");
+    // this.props.setAppStateProperty("managerName", "Mateusz");
+    // this.props.setAppStateProperty("managerSurname", "Sudak");
+    // this.props.setAppStateProperty("cateringFirmName", "Kanapka w pracy");
 
-    this.props.setAppStateProperty("isAuthenticated", true);
+    // this.props.setAppStateProperty("isAuthenticated", true);
 
     try {
 
