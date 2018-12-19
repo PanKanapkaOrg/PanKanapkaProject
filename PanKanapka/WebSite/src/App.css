@@ -1,0 +1,12 @@
+.App {
+  margin-top: 15px;
+}
+
+.App .navbar-brand {
+  font-weight: bold;
+}
+
+.loading{
+  margin-top:150px;
+  margin-bottom: 150px;
+}

@@ -1,12 +1,11 @@
 ﻿using Api.Domain.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Api.Domain.Components
 {
     public interface IFoodsRepository
     {
-        IEnumerable<Food> GetFoods(string cateringFirmId);
+        Task<IEnumerable<Food>> GetFoods(long cateringFirmId);
     }
 }

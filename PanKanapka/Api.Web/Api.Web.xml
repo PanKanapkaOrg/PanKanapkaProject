@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Api.Web</name>
+    </assembly>
+    <members>
+        <member name="M:Api.Web.Controllers.ValuesController.Get">
+            <summary>
+            to so wartosci
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
