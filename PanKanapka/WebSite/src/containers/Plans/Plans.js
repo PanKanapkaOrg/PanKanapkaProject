@@ -98,6 +98,32 @@ export default class Plans extends Component {
                         <table className="highlight centered">
                             <thead>
                                 <tr>
+                                    <th>
+
+                                    </th>
+                                    <th>
+                                        Poniedzialek
+                                    </th>
+                                    <th>
+                                        Wtorek
+                                    </th>
+                                    <th>
+                                        Sroda
+                                    </th>
+                                    <th>
+                                        Czwartek
+                                    </th>
+                                    <th>
+                                        Piatek
+                                    </th>
+                                    <th>
+                                        Sobota
+                                    </th>
+                                    <th>
+                                        Niedziela
+                                    </th>
+                                </tr>
+                                <tr>
                                     <th>Pracownik</th>
                                     {
                                         this.state.Tasks[0].taskItems.map((item) => {
