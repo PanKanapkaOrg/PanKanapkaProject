@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +19,19 @@ namespace Db.Contracts
             dbConn = dbConnection;
         }
 
+        public async Task AddWorker (string name, string surname, long cateringFirmId, string email, string password) {
+            string addWorkerProcedure = @"AddWorkerProcedure";
+            using (dbConn)
+            {
+                dbConn.Open();
+                if (dbConn.State != ConnectionState.Open)
+                {
+                    throw new Exception("Nie udało się polączyć z bazą");
+                }
+                var loginData = dbConn.Execute(addWorkerProcedure, new {name,surname,cateringFirmId,email,password});
+            }
+
+        }
 
         public async Task<IEnumerable<Worker>> GetWorkers(long CateringFirmId)
         {
