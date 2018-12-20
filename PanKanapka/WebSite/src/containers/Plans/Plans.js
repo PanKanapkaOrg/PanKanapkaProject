@@ -5,8 +5,8 @@ import GetWorkers from "../services/api/GetWorkers";
 import CircularSpinnerLoading from "../CircularSpinnerLoading";
 import Modal from 'react-modal';
 import CreateTaskModal from "./CreateTaskModal"
+import ConfirmDeleteModal from "./ConfirmDeleteModal"
 import "./plans.css";
-import axios from "axios";
 
 export default class Plans extends Component {
     constructor(props) {
@@ -26,6 +26,8 @@ export default class Plans extends Component {
             choosenDate: null,
             choosenFirms: null,
             display: null,
+            toDelete:null,
+            showConfirmDeleteModal:false
         };
     }
 
@@ -60,17 +62,9 @@ export default class Plans extends Component {
         this.loadTasks();
     }
 
-    deleteTask = (id) => {
-        axios.post('http://localhost:5000/api/Tasks/delete', [id]).then(repsonse => {
-            if (repsonse.status == 200) {
-                this.loadTasks();
-            }
-        });
-        this.loadTasks();
-    }
-
     closeModal = (reload) => {
         this.setState({
+            showConfirmDeleteModal:false,
             isModalDisplay: false,
             display: null
         });
@@ -106,24 +100,21 @@ export default class Plans extends Component {
                                 <tr>
                                     <th>Pracownik</th>
                                     {
-                                        this.state.Tasks[0].taskItems.map((item) =>
-                                            {
-                                                var date = new Date(item.date);
-                                                var dateStr = new Date(item.date).toLocaleDateString('PL-pl');
-                                                var style = {
-                                                    color:'red',
-                                                    fontWeight:'bold'
-                                                };
+                                        this.state.Tasks[0].taskItems.map((item) => {
+                                            var date = new Date(item.date);
+                                            var dateStr = new Date(item.date).toLocaleDateString('PL-pl');
+                                            var style = {
+                                                color: 'red',
+                                                fontWeight: 'bold'
+                                            };
 
-                                                if(date.getDate() == this.state.Today.getDate())
-                                                {
-                                                    return <th style={style}>{dateStr}</th>
-                                                }
-                                                else
-                                                {
-                                                    return <th>{dateStr}</th>;
-                                                }
+                                            if (date.getDate() == this.state.Today.getDate()) {
+                                                return <th style={style}>{dateStr}</th>
                                             }
+                                            else {
+                                                return <th>{dateStr}</th>;
+                                            }
+                                        }
                                         )
                                     }
                                 </tr>
@@ -150,9 +141,9 @@ export default class Plans extends Component {
                                                         <ul>
                                                             {taskItem.firms.map((firm) => {
                                                                 return (<li>
-                                                                    <button className="usun" onClick={() => {
-                                                                        this.deleteTask(firm.taskId)
-                                                                    }}>
+                                                                    <button className="usun" onClick={()=>{
+                                                                        this.setState({showConfirmDeleteModal:true, toDelete:firm.taskId})}
+                                                                    }>
                                                                         <span className="nazwa_firmy">{firm.name}</span>
                                                                         <i className="material-icons right">clear</i>
                                                                     </button>
@@ -194,7 +185,13 @@ export default class Plans extends Component {
 
                             </tbody>
                         </table>
-
+                        <Modal style="height:100px"
+                            isOpen={this.state.showConfirmDeleteModal}
+                            contentLabel="Example Modal">
+                            <ConfirmDeleteModal style="height:100px"
+                                id={this.state.toDelete}
+                                onClose={(reload)=>this.closeModal(reload)} />
+                        </Modal>)
                         <Modal
                             isOpen={this.state.isModalDisplay}
                             contentLabel="Example Modal">
