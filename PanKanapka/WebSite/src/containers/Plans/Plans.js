@@ -166,7 +166,9 @@ export default class Plans extends Component {
                                                     return (<td className="komorka">
                                                         <ul>
                                                             {taskItem.firms.map((firm) => {
+                                                                if (firm.isActiveTask)
                                                                 return (<li>
+                                                                        <i className="material-icons left">check_box_outline_blank</i>
                                                                     <button className="usun" onClick={()=>{
                                                                         this.setState({showConfirmDeleteModal:true, toDelete:firm.taskId})}
                                                                     }>
@@ -174,6 +176,18 @@ export default class Plans extends Component {
                                                                         <i className="material-icons right">clear</i>
                                                                     </button>
                                                                 </li>)
+                                                                else 
+                                                                return(
+                                                                    <li>
+                                                                        <i className="material-icons left">check</i>
+                                                                        <button className="usun" onClick={()=>{
+                                                                            this.setState({showConfirmDeleteModal:true, toDelete:firm.taskId})}
+                                                                        }>
+                                                                            <span className="nazwa_firmy">{firm.name}</span>
+                                                                            <i className="material-icons right">clear</i>
+                                                                        </button>
+                                                                    </li>)
+                                                                
                                                             }
                                                             )}
                                                         </ul>
