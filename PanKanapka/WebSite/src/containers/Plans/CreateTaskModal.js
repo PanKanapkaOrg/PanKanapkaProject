@@ -12,6 +12,7 @@ export default class CreateTaskModal extends Component {
             ClientFirms: props.clientFirms,
             Worker: props.worker,
             Date: props.date,
+            ShouldNotifyWorker: false,
             SelectedFirms: new Set()
         };
     }
@@ -27,15 +28,22 @@ export default class CreateTaskModal extends Component {
         }
     }
 
+    toggleNotification = event => {
+        event.preventDefault();
+
+        this.state.ShouldNotifyWorker = !this.state.ShouldNotifyWorker;
+    }
+
     handleSubmit = event => {
         this.setState({isLoading:true});
         var postData = {
             date: this.state.Date,
             workerId: this.state.Worker.id,
+            shouldNotifyWorker: this.state.ShouldNotifyWorker,
             clientFirmIds: Array.from(this.state.SelectedFirms)
         };
 
-        axios.post('http://localhost:5000/api/Tasks/create', [postData]).then(repsonse => {
+        axios.post('http://localhost:5000/api/Tasks/create', postData).then(repsonse => {
             if (repsonse.status == 200) {
                 window.setTimeout(() => this.props.onClose(true), 1000);
             }
@@ -119,6 +127,13 @@ export default class CreateTaskModal extends Component {
                             </div>
                             <div className="col s6 prawy">
                                 <h4>{this.state.Date.substring(0, 10)}</h4>
+                            </div>
+
+                            <div className="col s6 lewy">
+                                <label>
+                                    <input type="checkbox" key="hejKey" id="hejId" onChange={this.toggleNotification} />                                             
+                                    <span><h5 className="firmName">Wyslac powiadomienie do pracownika</h5></span>
+                                </label>
                             </div>
                             <div className="col s12">
                                 <h4><b>Firmy</b></h4>
