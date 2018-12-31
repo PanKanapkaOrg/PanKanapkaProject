@@ -7,8 +7,9 @@ class LoginProvider {
 
   LoginProvider(this.requester);
 
-  Future<Map<String, dynamic>> processLoginData(String email, String password) async {
-    String response = await requester.getRequest("api/login", { "mail" : email, "password" : password});
+  Future<Map<String, dynamic>> processLoginData(String email, String password, String fcmToken) async {
+    
+    String response = await requester.getRequest("api/login", {"Authorization" : fcmToken}, { "mail" : email, "password" : password});
 
     return json.decode(response) as Map<String, dynamic>;
   }

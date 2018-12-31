@@ -1,6 +1,8 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:pankan_appka/actions/actions.dart';
 import 'package:pankan_appka/api/components/tasks_repository.dart';
 import 'package:pankan_appka/api/http_requester.dart';
+import 'package:pankan_appka/api/login_provider.dart';
 import 'package:pankan_appka/api/models/models.dart' as ApiModels;
 import 'package:pankan_appka/api/reservations_repository.dart';
 import 'package:pankan_appka/api/tasks_repository.dart';
@@ -16,10 +18,14 @@ List<Middleware<AppState>> createWorkerTasksMiddleware() {
 
   Geocoder geocoder = GeolocatorGeocoder();
 
+  LoginProvider loginProvider = new LoginProvider(requester);
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   return [
     TypedMiddleware<AppState, LoadWorkerTasksAction>(_loadWorkerTasksMiddleware(
         tasksRepository, reservationsRepository, geocoder)),
     TypedMiddleware<AppState, ChangeDayAction>(_changeChoosenDayMiddleware()),
+    TypedMiddleware<AppState, WorkerLoggingInAction>(_workerAuthenticationMiddleware(loginProvider, _firebaseMessaging)),
   ];
 }
 
@@ -84,6 +90,35 @@ Middleware<AppState> _changeChoosenDayMiddleware() {
       if (!store.state.workerTasks
           .any((task) => task.date == action.choosenDay)) {
         store.dispatch(LoadWorkerTasksAction(date: action.choosenDay));
+      }
+    }
+
+    next(action);
+  };
+}
+
+Middleware<AppState> _workerAuthenticationMiddleware(LoginProvider loginProvider, FirebaseMessaging firebaseMessaging) {
+  return (Store<AppState> store, action, NextDispatcher next) async {
+    if(action is WorkerLoggingInAction)
+    {
+      String token = await firebaseMessaging.getToken();
+      print("Before login token: $token");
+      var values = await loginProvider.processLoginData(action.mail, action.password, token);
+      var worker = Worker(
+              cateringFirmId: values['firmId'] as int,
+              id: values['id'] as int,
+              name: values['name'] as String,
+              surname: values['surname'] as String);
+
+      if(worker.id != null)
+      {
+        print("Worker logged in");
+        store.dispatch(WorkerLoggedInAction(worker));
+      }
+      else {
+        store.dispatch(WorkerLogOffAction());
+        print("Worker logged off");
+        print("isLoading = ${store.state.isLoading}");
       }
     }
 

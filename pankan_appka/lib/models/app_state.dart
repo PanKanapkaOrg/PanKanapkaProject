@@ -19,7 +19,7 @@ class AppState {
         this.workerTasks = const [],
         this.activeTab = AppTab.tasks});
 
-  factory AppState.loading() => AppState(isLoading: true);
+  factory AppState.loading() => AppState(isLoading: false);
 
   WorkerDayTask get currentDay => workerTasks.firstWhere((task) => task.date.difference(choosenDay).inDays == 0, orElse: () => WorkerDayTask(date: choosenDay, firms: []));
 

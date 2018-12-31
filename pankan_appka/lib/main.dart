@@ -8,6 +8,7 @@ import 'package:pankan_appka/presentation/login_screen.dart';
 import 'package:redux/redux.dart';
 import 'package:pankan_appka/reducers/reducers.dart';
 import 'package:pankan_appka/middleware/worker_tasks_middleware.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() {
   final store = new Store<AppState>(
@@ -29,6 +30,22 @@ void main() {
 }
 
 class PanKanapkaApp extends StatelessWidget {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  
+  PanKanapkaApp()
+  {
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

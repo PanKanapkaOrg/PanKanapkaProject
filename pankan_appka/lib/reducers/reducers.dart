@@ -22,6 +22,8 @@ final workerTasksReducer = combineReducers<Iterable<WorkerDayTask>>([
 ]);
 
 final loadingReducer = combineReducers<bool>([
+  TypedReducer<bool, WorkerLogOffAction>((state, action){ print("Inside logoff reducer"); return false; }),
+  TypedReducer<bool, WorkerLoggingInAction>((state, action) => true),
   TypedReducer<bool, LoadWorkerTasksAction>((state, action) => true),
   TypedReducer<bool, WorkerTasksLoadedAction>((state, action) => false),
   TypedReducer<bool, WorkerTasksNotLoadedAction>((state, action) => false)

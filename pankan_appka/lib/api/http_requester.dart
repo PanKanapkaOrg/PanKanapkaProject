@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 abstract class HttpRequester
 {
   Future<String> post(String url, Map<String, dynamic> jsonMap);
-  Future<String> getRequest(String url, Map<String,String> parameters);
+  Future<String> getRequest(String url, Map<String,String> headers, Map<String,String> parameters);
 } 
 
 class ApiHttpRequester implements HttpRequester {
@@ -23,8 +23,8 @@ class ApiHttpRequester implements HttpRequester {
     return response.body;
   }
 
-  Future<String> getRequest(String url, Map<String,String> parameters) async {
-    var response = await http.get(_baseApiUri.replace(path: url, queryParameters: parameters));
+  Future<String> getRequest(String url, Map<String,String> headers, Map<String,String> parameters) async {
+    var response = await http.get(_baseApiUri.replace(path: url, queryParameters: parameters), headers: headers);
     return response.body;
   }
 }

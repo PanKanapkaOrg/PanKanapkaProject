@@ -37,6 +37,13 @@ class WorkerLoggedInAction {
   WorkerLoggedInAction(this.worker);
 }
 
+class WorkerLoggingInAction {
+  String mail;
+  String password;
+
+  WorkerLoggingInAction(this.mail, this.password);
+}
+
 class WorkerLogOffAction {
   WorkerLogOffAction();
 }
