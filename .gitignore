@@ -33,3 +33,4 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
+pankan_appka/android/app/google-services.json
