@@ -19,7 +19,7 @@ namespace Db.Contracts
             dbConn = dbConnection;
         }
 
-        public async System.Threading.Tasks.Task CreateTasks(IEnumerable<TaskCreationItem> tasksItems)
+        public async System.Threading.Tasks.Task CreateTask(TaskCreationItem newTaskItem)
         {
             string insertTaskSqlQuery = @"insert into Tasks values(@ClientFirmId, 0, @Date, @WorkerId)";
 
@@ -31,21 +31,18 @@ namespace Db.Contracts
                     throw new Exception("Nie udalo sie polaczyc z baza");
                 }
 
-                var affectedRows = dbConn.Execute(insertTaskSqlQuery,
-                tasksItems
-                .SelectMany(p =>
-                {
-                    return p.ClientFirmIds
+                dbConn.Execute(
+                        insertTaskSqlQuery,
+                        newTaskItem.ClientFirmIds
                             .Select(fId =>
                             {
                                 return new
                                 {
                                     ClientFirmId = fId,
-                                    p.Date,
-                                    p.WorkerId
+                                    newTaskItem.Date,
+                                    newTaskItem.WorkerId
                                 };
-                            });
-                })
+                            })
                 );
             }
         }
@@ -110,7 +107,7 @@ namespace Db.Contracts
 
                 IEnumerable<TaskDbResult> tasks =
                     dbConn.Query<TaskDbResult>(getTaskSqlQuery,
-                    new { dateRangeLength, from= from.Date, tasksFilter.WorkerIds });
+                    new { dateRangeLength, from = from.Date, tasksFilter.WorkerIds });
 
                 List<WorkerTask> workerTasks = tasks.GroupBy(
                 dbTask => new Worker()

@@ -6,6 +6,8 @@ namespace Api.Domain.Components
 {
     public interface ILoginRepository
     {
-        Task<Login> GetLoginData(string mail, string password);
+        Task<Login> GetLoginData(string mail, string password, string FCMToken = null);
+        
+        string GetWorkerFcmToken(long workerId);
     }
 }

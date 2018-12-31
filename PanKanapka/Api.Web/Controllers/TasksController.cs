@@ -12,16 +12,24 @@ namespace Api.Web.Controllers
     public class TasksController : Controller
     {
         private ITasksRepository _tasksRepository;
+        private INotificationManager _notificationManager;
 
-        public TasksController(ITasksRepository tasksRepository)
+        public TasksController(ITasksRepository tasksRepository, INotificationManager notificationManager)
         {
             _tasksRepository = tasksRepository;
+            _notificationManager = notificationManager;
         }
 
         [HttpPost("api/[controller]/create")]
-        public IActionResult CreateTasks([FromBody] IEnumerable<TaskCreationItem> tasksItems)
+        public async Task<IActionResult> CreateTask([FromBody] TaskCreationItem newTaskItem)
         {
-            _tasksRepository.CreateTasks(tasksItems);
+            await _tasksRepository.CreateTask(newTaskItem);
+
+            if(newTaskItem.ShouldNotifyWorker)
+            {
+                await _notificationManager.NotifyWorker(newTaskItem);
+            }
+
             return Ok();
         }
 

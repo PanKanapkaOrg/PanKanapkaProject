@@ -18,6 +18,7 @@ create table [Authentication]
 	mail nvarchar(max) not null,
 	pass varchar(255) not null,
 	role varchar(10) not null,
+	FCMToken varchar(256) NULL,
 	Constraint PK_Authentication_ID Primary Key(ID)
 ) 
 go
@@ -278,7 +279,7 @@ where w.ID in (1,2,3) and t.taskDate between CONVERT(DATETIME, '2018-10-27', 102
 
 --Procedura logowania
 go
-create or alter procedure LoginProcedure @mail varchar(50), @password varchar(50)
+create or alter procedure LoginProcedure @mail varchar(50), @password varchar(50), @FCMToken varchar(255) = null
 as
 declare @role varchar(20);
 declare @auth bigint;
@@ -286,7 +287,14 @@ declare @auth bigint;
 select @role = role, @auth = ID
 from Authentication 
 where mail=@mail and pass=@password;
-	
+
+if @auth is not NULL and @FCMToken is not NULL
+	BEGIN
+		update [Authentication]
+		set [Authentication].FCMToken = @FCMToken
+		where [Authentication].ID = @auth
+	END
+
 begin
 	if @role = 'Manager'  
 	begin

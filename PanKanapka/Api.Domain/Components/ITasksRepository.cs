@@ -13,7 +13,7 @@ namespace Api.Domain.Components
 
     public interface IManagerTasksRepository
     {
-        System.Threading.Tasks.Task CreateTasks(IEnumerable<TaskCreationItem> tasksItems);
+        System.Threading.Tasks.Task CreateTask(TaskCreationItem newTaskItem);
 
         System.Threading.Tasks.Task DeleteTasks(IEnumerable<long> taskIds);
     }

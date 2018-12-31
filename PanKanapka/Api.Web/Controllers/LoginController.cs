@@ -20,7 +20,8 @@ namespace Api.Web.Controllers
         [HttpGet("/api/[controller]")]
         public async Task<Login> GetLoginData([FromQuery]string mail, [FromQuery]string password, [FromQuery]string from)
         {
-            Login loginData = await _loginRepository.GetLoginData(mail, password);
+            string FCMToken = HttpContext.Request.Headers["Authorization"];
+            Login loginData = await _loginRepository.GetLoginData(mail, password, FCMToken);
             if (loginData == null)
                 throw new UnauthorizedAccessException("Błędny login lub hasło.");
             if (from == "web" && loginData.Role!="Manager")

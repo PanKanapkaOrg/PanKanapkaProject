@@ -36,6 +36,7 @@ namespace Api.Web
             services.AddScoped<IClientFirmsRepository, ClientFirmsDbRepository>();
             services.AddScoped<ITasksRepository, TasksDbRepository>();
             services.AddScoped<ILoginRepository, LoginDbRepository>();
+            services.AddScoped<INotificationManager, NotificationManager>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "PanKanapka API", Description = "PanKanapka API" });
