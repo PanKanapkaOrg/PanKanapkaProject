@@ -4,11 +4,5 @@
         <name>Api.Web</name>
     </assembly>
     <members>
-        <member name="M:Api.Web.Controllers.ValuesController.Get">
-            <summary>
-            to so wartosci
-            </summary>
-            <returns></returns>
-        </member>
     </members>
 </doc>
