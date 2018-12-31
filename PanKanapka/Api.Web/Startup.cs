@@ -29,7 +29,7 @@ namespace Api.Web
                     builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 }));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddScoped<IDbConnection>(p=>new SqlConnection(@"Integrated Security = SSPI; Persist Security Info = False; Initial Catalog = PanKanapka; Data Source =.\SQLEXPRESS;"));
+            services.AddTransient<IDbConnection>(p=>new SqlConnection(@"Integrated Security = SSPI; Persist Security Info = False; Initial Catalog = PanKanapka; Data Source =.\SQLEXPRESS;"));
             services.AddScoped<IWorkersRepository, WorkersDbRepository>();
             services.AddScoped<IReservationsRepository, ReservationsDbRepository>();
             services.AddScoped<IFoodsRepository, FoodsDbRepository>();
