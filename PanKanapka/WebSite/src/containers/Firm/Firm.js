@@ -22,19 +22,23 @@ export default class Home extends Component {
         document.title = "Firma - Serwis kateringowy"; //tytul dla przegladarki
         GetClientFirms(this.props)
             .then(firms => this.setState({ ClientFirms: firms }));
+        this.loadWorkers()
+    }
+    loadWorkers=()=>{
+        this.setState({isLoading:true})
         GetWorkers(this.props)
-            .then(workers => {
-                window.setTimeout(() => this.setState({ Workers: workers, isLoading: false }), 1500);
-            });
+        .then(workers => {
+            window.setTimeout(() => this.setState({ Workers: workers, isLoading: false }), 500);
+        });
+
     }
     closeModal = (reload) => {
         this.setState({
-            showConfirmDeleteModal:false,
-            isModalDisplay: false,
+            showAddWorkerModal:false,
             display: null
         });
         if (reload) {
-            this.loadTasks();
+            this.loadWorkers();
         }
     }
 
@@ -80,16 +84,16 @@ export default class Home extends Component {
                                 <thead>
                                     <tr><th>
                                         <h5>Twoi pracownicy
-                                        <button
+                                        </h5>
+                                    </th>
+                                    <button
+                                            style={{display:this.state.display}}
                                             className="addWorker btn waves-effect #1a237e indigo darken-4"
                                             onClick={() => {
-                                                this.setState({ showAddWorkerModal: true })
+                                                this.setState({ showAddWorkerModal: true, display:'none' })
                                             }}>
-                                            <i className="material-icons left">add</i>
-                                        </button>
-                                        </h5>
-
-                                    </th></tr>
+                                            <i className="material-icons right">add</i>
+                                        </button></tr>
                                     <tr>
                                         <th>Lp.</th>
                                         <th>Imie</th>

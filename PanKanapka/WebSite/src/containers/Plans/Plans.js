@@ -225,10 +225,10 @@ export default class Plans extends Component {
 
                             </tbody>
                         </table>
-                        <Modal style="height:100px"
+                        <Modal
                             isOpen={this.state.showConfirmDeleteModal}
                             contentLabel="Example Modal">
-                            <ConfirmDeleteModal style="height:100px"
+                            <ConfirmDeleteModal style={{height:'100px'}}
                                 id={this.state.toDelete}
                                 onClose={(reload)=>this.closeModal(reload)} />
                         </Modal>)

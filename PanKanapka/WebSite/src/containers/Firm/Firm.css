@@ -21,3 +21,6 @@
   .Home img{
     width: 4%;
   }
+  .addWorker{
+    align-self: right;
+  }

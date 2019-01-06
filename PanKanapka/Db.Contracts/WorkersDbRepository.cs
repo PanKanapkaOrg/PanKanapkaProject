@@ -19,8 +19,8 @@ namespace Db.Contracts
             dbConn = dbConnection;
         }
 
-        public async Task AddWorker (string name, string surname, long cateringFirmId, string email, string password) {
-            string addWorkerProcedure = @"AddWorkerProcedure";
+        public async Task AddWorker (WorkerAddingData WorkerData) {
+            string addWorkerProcedure = @"AddWorkerProcedure @cateringFirmId, @name, @surname, @mail, @password";
             using (dbConn)
             {
                 dbConn.Open();
@@ -28,7 +28,16 @@ namespace Db.Contracts
                 {
                     throw new Exception("Nie udało się polączyć z bazą");
                 }
-                var loginData = dbConn.Execute(addWorkerProcedure, new {name,surname,cateringFirmId,email,password});
+                var loginData = dbConn.Execute(addWorkerProcedure,
+                    new
+                    {
+                        WorkerData.cateringFirmId,
+                        WorkerData.name,
+                        WorkerData.surname,
+                        WorkerData.mail,
+                        WorkerData.password
+                    }
+                );
             }
 
         }

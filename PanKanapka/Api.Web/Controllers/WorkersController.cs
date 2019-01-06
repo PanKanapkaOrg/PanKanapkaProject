@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Domain.Components;
 using Api.Domain.Models;
@@ -16,9 +17,9 @@ namespace Api.Web.Controllers
         }
 
         [HttpPost("api/[controller]/create")]
-        public IActionResult AddWorker(string name, string surname, long cateringFirmId, string email, string password)
+        public IActionResult AddWorker([FromBody] WorkerAddingData WorkerData)
         {
-            _workerRepository.AddWorker(name,surname,cateringFirmId,email,password);
+            _workerRepository.AddWorker(WorkerData);
             return Ok();
         }
 
